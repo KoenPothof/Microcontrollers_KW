@@ -13,19 +13,19 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .debug_aranges 00000028  00000000  00000000  00000214  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000966  00000000  00000000  0000023c  2**0
+  5 .debug_info   00000949  00000000  00000000  0000023c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000869  00000000  00000000  00000ba2  2**0
+  6 .debug_abbrev 00000851  00000000  00000000  00000b85  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000002e7  00000000  00000000  0000140b  2**0
+  7 .debug_line   000002e7  00000000  00000000  000013d6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000034  00000000  00000000  000016f4  2**2
+  8 .debug_frame  00000034  00000000  00000000  000016c0  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000044a  00000000  00000000  00001728  2**0
+  9 .debug_str    0000044a  00000000  00000000  000016f4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000f2  00000000  00000000  00001b72  2**0
+ 10 .debug_loc    000000f2  00000000  00000000  00001b3e  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000018  00000000  00000000  00001c64  2**0
+ 11 .debug_ranges 00000018  00000000  00000000  00001c30  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -131,9 +131,9 @@ Disassembly of section .text:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
 
 000000b8 <display>:
-	}
-	return 1;
-}
+	0b01110001, // F
+	0b01111001, // E
+};
 
 void display(int digit){
 	PORTD = Numbers[digit];
@@ -145,9 +145,7 @@ void display(int digit){
   c2:	08 95       	ret
 
 000000c4 <main>:
-	0b01110001, // F
-	0b01111001, // E
-};
+}
 
 int main( void ) {
 	DDRD = 0b11111111;

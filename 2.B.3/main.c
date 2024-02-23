@@ -2,11 +2,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-
-void display(int digit){
-	PORTD = Numbers[digit];
-}
-
 const unsigned char Numbers [17] = {
 	0b00111111, // 0
 	0b00000110, // 1
@@ -26,6 +21,10 @@ const unsigned char Numbers [17] = {
 	0b01110001, // F
 	0b01111001, // E
 };
+
+void display(int digit){
+	PORTD = Numbers[digit];
+}
 
 int main( void ) {
 	DDRD = 0b11111111;
