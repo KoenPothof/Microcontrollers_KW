@@ -2,7 +2,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-const unsigned char Numbers [16] = {
+const unsigned char Numbers [17] = {
 	0b00111111, // 0
 	0b00000110, // 1
 	0b01011011, // 2
@@ -19,18 +19,30 @@ const unsigned char Numbers [16] = {
 	0b01011110, // D
 	0b01111001, // E
 	0b01110001, // F
+	0b01111001, // E
 };
 
 int main( void ) {
-	DDRD = 0b11111111;					// PORTD all output
+	DDRD = 0b11111111;
+	PORTC = 0x01;
+	PORTB = 0x01;
+	
 	int i = 0;
 	while (1) {
-		if(i == 16){
-			i = 0;
+		if(PINC == 1){
+			i++;
+			_delay_ms(400);
+		}
+		if(PINB == 1){
+			if(i>0){
+				i--;
+				_delay_ms(400);
+			}
+		}
+		if(i>15){
+			i = 16;
 		}
 		display(i);
-		_delay_ms(1000);
-		i++;
 	}
 	return 1;
 }
