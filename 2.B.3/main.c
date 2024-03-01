@@ -46,6 +46,10 @@ int main( void ) {
 		if(i>15){
 			i = 16;
 		}
+		if(PINB == 1 && PINC == 1){
+			i = 0;
+			_delay_ms(400);
+		}
 		display(i);
 	}
 	return 1;

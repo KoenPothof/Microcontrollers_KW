@@ -3,29 +3,29 @@
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000012  00800100  00000120  00000194  2**0
+  0 .data         00000012  00800100  00000142  000001b6  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000120  00000000  00000000  00000074  2**1
+  1 .text         00000142  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000001a6  2**0
+  2 .comment      00000030  00000000  00000000  000001c8  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001d8  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000001f8  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000028  00000000  00000000  00000214  2**0
+  4 .debug_aranges 00000028  00000000  00000000  00000234  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000949  00000000  00000000  0000023c  2**0
+  5 .debug_info   00000982  00000000  00000000  0000025c  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000851  00000000  00000000  00000b85  2**0
+  6 .debug_abbrev 00000851  00000000  00000000  00000bde  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000002e7  00000000  00000000  000013d6  2**0
+  7 .debug_line   0000030b  00000000  00000000  0000142f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000034  00000000  00000000  000016c0  2**2
+  8 .debug_frame  00000034  00000000  00000000  0000173c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000044a  00000000  00000000  000016f4  2**0
+  9 .debug_str    0000044a  00000000  00000000  00001770  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000000f2  00000000  00000000  00001b3e  2**0
+ 10 .debug_loc    00000156  00000000  00000000  00001bba  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000018  00000000  00000000  00001c30  2**0
+ 11 .debug_ranges 00000018  00000000  00000000  00001d10  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -114,7 +114,7 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	e0 e2       	ldi	r30, 0x20	; 32
+  9e:	e2 e4       	ldi	r30, 0x42	; 66
   a0:	f1 e0       	ldi	r31, 0x01	; 1
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
@@ -125,7 +125,7 @@ Disassembly of section .text:
   ae:	b1 07       	cpc	r27, r17
   b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
   b2:	08 d0       	rcall	.+16     	; 0xc4 <main>
-  b4:	33 c0       	rjmp	.+102    	; 0x11c <_exit>
+  b4:	44 c0       	rjmp	.+136    	; 0x13e <_exit>
 
 000000b6 <__bad_interrupt>:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
@@ -214,14 +214,35 @@ int main( void ) {
  112:	c0 e1       	ldi	r28, 0x10	; 16
  114:	d0 e0       	ldi	r29, 0x00	; 0
 		}
+		if(PINB == 1 && PINC == 1){
+ 116:	86 b3       	in	r24, 0x16	; 22
+ 118:	81 30       	cpi	r24, 0x01	; 1
+ 11a:	71 f4       	brne	.+28     	; 0x138 <main+0x74>
+ 11c:	83 b3       	in	r24, 0x13	; 19
+ 11e:	81 30       	cpi	r24, 0x01	; 1
+ 120:	59 f4       	brne	.+22     	; 0x138 <main+0x74>
+ 122:	2f ef       	ldi	r18, 0xFF	; 255
+ 124:	83 ec       	ldi	r24, 0xC3	; 195
+ 126:	99 e0       	ldi	r25, 0x09	; 9
+ 128:	21 50       	subi	r18, 0x01	; 1
+ 12a:	80 40       	sbci	r24, 0x00	; 0
+ 12c:	90 40       	sbci	r25, 0x00	; 0
+ 12e:	e1 f7       	brne	.-8      	; 0x128 <main+0x64>
+ 130:	00 c0       	rjmp	.+0      	; 0x132 <main+0x6e>
+ 132:	00 00       	nop
+			i = 0;
+ 134:	c0 e0       	ldi	r28, 0x00	; 0
+ 136:	d0 e0       	ldi	r29, 0x00	; 0
+			_delay_ms(400);
+		}
 		display(i);
- 116:	ce 01       	movw	r24, r28
- 118:	cf df       	rcall	.-98     	; 0xb8 <display>
+ 138:	ce 01       	movw	r24, r28
+ 13a:	be df       	rcall	.-132    	; 0xb8 <display>
 	}
- 11a:	db cf       	rjmp	.-74     	; 0xd2 <main+0xe>
+ 13c:	ca cf       	rjmp	.-108    	; 0xd2 <main+0xe>
 
-0000011c <_exit>:
- 11c:	f8 94       	cli
+0000013e <_exit>:
+ 13e:	f8 94       	cli
 
-0000011e <__stop_program>:
- 11e:	ff cf       	rjmp	.-2      	; 0x11e <__stop_program>
+00000140 <__stop_program>:
+ 140:	ff cf       	rjmp	.-2      	; 0x140 <__stop_program>
