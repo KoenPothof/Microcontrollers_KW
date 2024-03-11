@@ -3,29 +3,29 @@
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000022  00800100  0000023c  000002b0  2**0
+  0 .data         00000024  00800100  00000280  000002f4  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000023c  00000000  00000000  00000074  2**1
+  1 .text         00000280  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000002d2  2**0
+  2 .comment      00000030  00000000  00000000  00000318  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000304  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000348  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000070  00000000  00000000  00000340  2**0
+  4 .debug_aranges 00000070  00000000  00000000  00000384  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000d18  00000000  00000000  000003b0  2**0
+  5 .debug_info   00000dc3  00000000  00000000  000003f4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000994  00000000  00000000  000010c8  2**0
+  6 .debug_abbrev 00000994  00000000  00000000  000011b7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000005dd  00000000  00000000  00001a5c  2**0
+  7 .debug_line   00000601  00000000  00000000  00001b4b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000c8  00000000  00000000  0000203c  2**2
+  8 .debug_frame  000000c8  00000000  00000000  0000214c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000049e  00000000  00000000  00002104  2**0
+  9 .debug_str    0000049e  00000000  00000000  00002214  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000034f  00000000  00000000  000025a2  2**0
+ 10 .debug_loc    00000427  00000000  00000000  000026b2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000050  00000000  00000000  000028f1  2**0
+ 11 .debug_ranges 00000050  00000000  00000000  00002ad9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -114,18 +114,18 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	ec e3       	ldi	r30, 0x3C	; 60
+  9e:	e0 e8       	ldi	r30, 0x80	; 128
   a0:	f2 e0       	ldi	r31, 0x02	; 2
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
   a6:	02 c0       	rjmp	.+4      	; 0xac <__do_copy_data+0x14>
   a8:	07 90       	elpm	r0, Z+
   aa:	0d 92       	st	X+, r0
-  ac:	a2 32       	cpi	r26, 0x22	; 34
+  ac:	a4 32       	cpi	r26, 0x24	; 36
   ae:	b1 07       	cpc	r27, r17
   b0:	d9 f7       	brne	.-10     	; 0xa8 <__do_copy_data+0x10>
   b2:	6b d0       	rcall	.+214    	; 0x18a <main>
-  b4:	c1 c0       	rjmp	.+386    	; 0x238 <_exit>
+  b4:	e3 c0       	rjmp	.+454    	; 0x27c <_exit>
 
 000000b6 <__bad_interrupt>:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
@@ -358,7 +358,7 @@ int main (void){
  18c:	82 e0       	ldi	r24, 0x02	; 2
  18e:	90 e0       	ldi	r25, 0x00	; 0
  190:	f9 df       	rcall	.-14     	; 0x184 <set_cursor>
-	display_text("NIGGER");
+	display_text("Begin");
  192:	80 e0       	ldi	r24, 0x00	; 0
  194:	91 e0       	ldi	r25, 0x01	; 1
  196:	bb df       	rcall	.-138    	; 0x10e <display_text>
@@ -369,126 +369,159 @@ int main (void){
 	PORTE = 0x01;
  19c:	81 e0       	ldi	r24, 0x01	; 1
  19e:	83 b9       	out	0x03, r24	; 3
-	PORTF = 0x01;
- 1a0:	80 93 62 00 	sts	0x0062, r24	; 0x800062 <__TEXT_REGION_LENGTH__+0x7e0062>
+	PORTG = 0x01;
+ 1a0:	80 93 65 00 	sts	0x0065, r24	; 0x800065 <__TEXT_REGION_LENGTH__+0x7e0065>
 	
 	int i = 0;
  1a4:	c0 e0       	ldi	r28, 0x00	; 0
  1a6:	d0 e0       	ldi	r29, 0x00	; 0
  1a8:	02 c0       	rjmp	.+4      	; 0x1ae <main+0x24>
-			_delay_ms(400);
-			init();
-			display_text("Nikkel 2");
-		}
+		init();
+		display_text("f ingedrukt");
+		_delay_ms(500);
+	}
 		if(i>15){
 			i = 16;
  1aa:	c0 e1       	ldi	r28, 0x10	; 16
  1ac:	d0 e0       	ldi	r29, 0x00	; 0
- 1ae:	8f e1       	ldi	r24, 0x1F	; 31
- 1b0:	9e e4       	ldi	r25, 0x4E	; 78
- 1b2:	01 97       	sbiw	r24, 0x01	; 1
- 1b4:	f1 f7       	brne	.-4      	; 0x1b2 <main+0x28>
- 1b6:	00 c0       	rjmp	.+0      	; 0x1b8 <main+0x2e>
- 1b8:	00 00       	nop
-	PORTF = 0x01;
+ 1ae:	2f ef       	ldi	r18, 0xFF	; 255
+ 1b0:	80 e7       	ldi	r24, 0x70	; 112
+ 1b2:	92 e0       	ldi	r25, 0x02	; 2
+ 1b4:	21 50       	subi	r18, 0x01	; 1
+ 1b6:	80 40       	sbci	r24, 0x00	; 0
+ 1b8:	90 40       	sbci	r25, 0x00	; 0
+ 1ba:	e1 f7       	brne	.-8      	; 0x1b4 <main+0x2a>
+ 1bc:	00 c0       	rjmp	.+0      	; 0x1be <main+0x34>
+ 1be:	00 00       	nop
+	PORTG = 0x01;
 	
 	int i = 0;
 	while (1) {
-		_delay_ms(10);
-		if(PINE == 1){
- 1ba:	81 b1       	in	r24, 0x01	; 1
- 1bc:	81 30       	cpi	r24, 0x01	; 1
- 1be:	71 f4       	brne	.+28     	; 0x1dc <main+0x52>
-			i++;
- 1c0:	21 96       	adiw	r28, 0x01	; 1
- 1c2:	9f ef       	ldi	r25, 0xFF	; 255
- 1c4:	23 ec       	ldi	r18, 0xC3	; 195
- 1c6:	89 e0       	ldi	r24, 0x09	; 9
- 1c8:	91 50       	subi	r25, 0x01	; 1
- 1ca:	20 40       	sbci	r18, 0x00	; 0
- 1cc:	80 40       	sbci	r24, 0x00	; 0
- 1ce:	e1 f7       	brne	.-8      	; 0x1c8 <main+0x3e>
- 1d0:	00 c0       	rjmp	.+0      	; 0x1d2 <main+0x48>
-			_delay_ms(400);
-			init();
- 1d2:	00 00       	nop
-			display_text("Nikkel 1");
- 1d4:	d0 df       	rcall	.-96     	; 0x176 <init>
- 1d6:	87 e0       	ldi	r24, 0x07	; 7
- 1d8:	91 e0       	ldi	r25, 0x01	; 1
- 1da:	99 df       	rcall	.-206    	; 0x10e <display_text>
-		}
-		if(PINE == 1 && PIND == 1){
- 1dc:	81 b1       	in	r24, 0x01	; 1
- 1de:	81 30       	cpi	r24, 0x01	; 1
- 1e0:	91 f4       	brne	.+36     	; 0x206 <main+0x7c>
- 1e2:	80 b3       	in	r24, 0x10	; 16
- 1e4:	81 30       	cpi	r24, 0x01	; 1
- 1e6:	79 f4       	brne	.+30     	; 0x206 <main+0x7c>
- 1e8:	9f ef       	ldi	r25, 0xFF	; 255
- 1ea:	23 ec       	ldi	r18, 0xC3	; 195
- 1ec:	89 e0       	ldi	r24, 0x09	; 9
- 1ee:	91 50       	subi	r25, 0x01	; 1
- 1f0:	20 40       	sbci	r18, 0x00	; 0
- 1f2:	80 40       	sbci	r24, 0x00	; 0
- 1f4:	e1 f7       	brne	.-8      	; 0x1ee <main+0x64>
+		_delay_ms(100);
+		if(PINE == 1 && PING == 1){
+ 1c0:	81 b1       	in	r24, 0x01	; 1
+ 1c2:	81 30       	cpi	r24, 0x01	; 1
+ 1c4:	e9 f4       	brne	.+58     	; 0x200 <main+0x76>
+ 1c6:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <__TEXT_REGION_LENGTH__+0x7e0063>
+ 1ca:	81 30       	cpi	r24, 0x01	; 1
+ 1cc:	c9 f4       	brne	.+50     	; 0x200 <main+0x76>
+ 1ce:	2f ef       	ldi	r18, 0xFF	; 255
+ 1d0:	83 ec       	ldi	r24, 0xC3	; 195
+ 1d2:	99 e0       	ldi	r25, 0x09	; 9
+ 1d4:	21 50       	subi	r18, 0x01	; 1
+ 1d6:	80 40       	sbci	r24, 0x00	; 0
+ 1d8:	90 40       	sbci	r25, 0x00	; 0
+ 1da:	e1 f7       	brne	.-8      	; 0x1d4 <main+0x4a>
+ 1dc:	00 c0       	rjmp	.+0      	; 0x1de <main+0x54>
 			i = 0;
 			_delay_ms(400);
 			init();
+ 1de:	00 00       	nop
+			display_text("e en f ingedrukt");
+ 1e0:	ca df       	rcall	.-108    	; 0x176 <init>
+ 1e2:	86 e0       	ldi	r24, 0x06	; 6
+ 1e4:	91 e0       	ldi	r25, 0x01	; 1
+ 1e6:	93 df       	rcall	.-218    	; 0x10e <display_text>
+ 1e8:	2f ef       	ldi	r18, 0xFF	; 255
+ 1ea:	84 e3       	ldi	r24, 0x34	; 52
+ 1ec:	9c e0       	ldi	r25, 0x0C	; 12
+ 1ee:	21 50       	subi	r18, 0x01	; 1
+ 1f0:	80 40       	sbci	r24, 0x00	; 0
+ 1f2:	90 40       	sbci	r25, 0x00	; 0
+ 1f4:	e1 f7       	brne	.-8      	; 0x1ee <main+0x64>
  1f6:	00 c0       	rjmp	.+0      	; 0x1f8 <main+0x6e>
  1f8:	00 00       	nop
-			display_text("Nikkel 3");
- 1fa:	bd df       	rcall	.-134    	; 0x176 <init>
- 1fc:	80 e1       	ldi	r24, 0x10	; 16
- 1fe:	91 e0       	ldi	r25, 0x01	; 1
- 200:	86 df       	rcall	.-244    	; 0x10e <display_text>
-			_delay_ms(400);
-			init();
-			display_text("Nikkel 1");
-		}
-		if(PINE == 1 && PIND == 1){
+	
+	int i = 0;
+	while (1) {
+		_delay_ms(100);
+		if(PINE == 1 && PING == 1){
 			i = 0;
- 202:	c0 e0       	ldi	r28, 0x00	; 0
- 204:	d0 e0       	ldi	r29, 0x00	; 0
+ 1fa:	c0 e0       	ldi	r28, 0x00	; 0
+ 1fc:	d0 e0       	ldi	r29, 0x00	; 0
+ 1fe:	39 c0       	rjmp	.+114    	; 0x272 <main+0xe8>
 			_delay_ms(400);
 			init();
-			display_text("Nikkel 3");
-		}
-		if(PIND == 1 && i>5){
- 206:	80 b3       	in	r24, 0x10	; 16
- 208:	81 30       	cpi	r24, 0x01	; 1
- 20a:	89 f4       	brne	.+34     	; 0x22e <main+0xa4>
- 20c:	c6 30       	cpi	r28, 0x06	; 6
- 20e:	d1 05       	cpc	r29, r1
- 210:	74 f0       	brlt	.+28     	; 0x22e <main+0xa4>
-			i--;
- 212:	21 97       	sbiw	r28, 0x01	; 1
- 214:	9f ef       	ldi	r25, 0xFF	; 255
- 216:	23 ec       	ldi	r18, 0xC3	; 195
- 218:	89 e0       	ldi	r24, 0x09	; 9
- 21a:	91 50       	subi	r25, 0x01	; 1
- 21c:	20 40       	sbci	r18, 0x00	; 0
- 21e:	80 40       	sbci	r24, 0x00	; 0
- 220:	e1 f7       	brne	.-8      	; 0x21a <main+0x90>
+			display_text("e en f ingedrukt");
+			_delay_ms(500);
+		}else if(PINE == 1){
+ 200:	81 b1       	in	r24, 0x01	; 1
+ 202:	81 30       	cpi	r24, 0x01	; 1
+ 204:	c1 f4       	brne	.+48     	; 0x236 <main+0xac>
+			i++;
+ 206:	21 96       	adiw	r28, 0x01	; 1
+ 208:	2f ef       	ldi	r18, 0xFF	; 255
+ 20a:	83 ec       	ldi	r24, 0xC3	; 195
+ 20c:	99 e0       	ldi	r25, 0x09	; 9
+ 20e:	21 50       	subi	r18, 0x01	; 1
+ 210:	80 40       	sbci	r24, 0x00	; 0
+ 212:	90 40       	sbci	r25, 0x00	; 0
+ 214:	e1 f7       	brne	.-8      	; 0x20e <main+0x84>
 			_delay_ms(400);
 			init();
- 222:	00 c0       	rjmp	.+0      	; 0x224 <main+0x9a>
- 224:	00 00       	nop
-			display_text("Nikkel 2");
- 226:	a7 df       	rcall	.-178    	; 0x176 <init>
- 228:	89 e1       	ldi	r24, 0x19	; 25
- 22a:	91 e0       	ldi	r25, 0x01	; 1
- 22c:	70 df       	rcall	.-288    	; 0x10e <display_text>
-		}
+ 216:	00 c0       	rjmp	.+0      	; 0x218 <main+0x8e>
+ 218:	00 00       	nop
+			display_text("e ingedrukt");
+ 21a:	ad df       	rcall	.-166    	; 0x176 <init>
+ 21c:	87 e1       	ldi	r24, 0x17	; 23
+ 21e:	91 e0       	ldi	r25, 0x01	; 1
+ 220:	76 df       	rcall	.-276    	; 0x10e <display_text>
+ 222:	2f ef       	ldi	r18, 0xFF	; 255
+ 224:	84 e3       	ldi	r24, 0x34	; 52
+ 226:	9c e0       	ldi	r25, 0x0C	; 12
+ 228:	21 50       	subi	r18, 0x01	; 1
+ 22a:	80 40       	sbci	r24, 0x00	; 0
+ 22c:	90 40       	sbci	r25, 0x00	; 0
+ 22e:	e1 f7       	brne	.-8      	; 0x228 <main+0x9e>
+ 230:	00 c0       	rjmp	.+0      	; 0x232 <main+0xa8>
+ 232:	00 00       	nop
+ 234:	1e c0       	rjmp	.+60     	; 0x272 <main+0xe8>
+			_delay_ms(500);
+	}else if(PING == 1 && i > 0){
+ 236:	80 91 63 00 	lds	r24, 0x0063	; 0x800063 <__TEXT_REGION_LENGTH__+0x7e0063>
+ 23a:	81 30       	cpi	r24, 0x01	; 1
+ 23c:	d1 f4       	brne	.+52     	; 0x272 <main+0xe8>
+ 23e:	1c 16       	cp	r1, r28
+ 240:	1d 06       	cpc	r1, r29
+ 242:	bc f4       	brge	.+46     	; 0x272 <main+0xe8>
+		i--;
+ 244:	21 97       	sbiw	r28, 0x01	; 1
+ 246:	2f ef       	ldi	r18, 0xFF	; 255
+ 248:	83 ec       	ldi	r24, 0xC3	; 195
+ 24a:	99 e0       	ldi	r25, 0x09	; 9
+ 24c:	21 50       	subi	r18, 0x01	; 1
+ 24e:	80 40       	sbci	r24, 0x00	; 0
+ 250:	90 40       	sbci	r25, 0x00	; 0
+ 252:	e1 f7       	brne	.-8      	; 0x24c <main+0xc2>
+		_delay_ms(400);
+		init();
+ 254:	00 c0       	rjmp	.+0      	; 0x256 <main+0xcc>
+ 256:	00 00       	nop
+		display_text("f ingedrukt");
+ 258:	8e df       	rcall	.-228    	; 0x176 <init>
+ 25a:	8b e0       	ldi	r24, 0x0B	; 11
+ 25c:	91 e0       	ldi	r25, 0x01	; 1
+ 25e:	57 df       	rcall	.-338    	; 0x10e <display_text>
+ 260:	2f ef       	ldi	r18, 0xFF	; 255
+ 262:	84 e3       	ldi	r24, 0x34	; 52
+ 264:	9c e0       	ldi	r25, 0x0C	; 12
+ 266:	21 50       	subi	r18, 0x01	; 1
+ 268:	80 40       	sbci	r24, 0x00	; 0
+ 26a:	90 40       	sbci	r25, 0x00	; 0
+ 26c:	e1 f7       	brne	.-8      	; 0x266 <main+0xdc>
+ 26e:	00 c0       	rjmp	.+0      	; 0x270 <main+0xe6>
+ 270:	00 00       	nop
+		_delay_ms(500);
+	}
 		if(i>15){
- 22e:	c0 31       	cpi	r28, 0x10	; 16
- 230:	d1 05       	cpc	r29, r1
- 232:	0c f0       	brlt	.+2      	; 0x236 <main+0xac>
- 234:	ba cf       	rjmp	.-140    	; 0x1aa <main+0x20>
- 236:	bb cf       	rjmp	.-138    	; 0x1ae <main+0x24>
+ 272:	c0 31       	cpi	r28, 0x10	; 16
+ 274:	d1 05       	cpc	r29, r1
+ 276:	0c f0       	brlt	.+2      	; 0x27a <main+0xf0>
+ 278:	98 cf       	rjmp	.-208    	; 0x1aa <main+0x20>
+ 27a:	99 cf       	rjmp	.-206    	; 0x1ae <main+0x24>
 
-00000238 <_exit>:
- 238:	f8 94       	cli
+0000027c <_exit>:
+ 27c:	f8 94       	cli
 
-0000023a <__stop_program>:
- 23a:	ff cf       	rjmp	.-2      	; 0x23a <__stop_program>
+0000027e <__stop_program>:
+ 27e:	ff cf       	rjmp	.-2      	; 0x27e <__stop_program>
