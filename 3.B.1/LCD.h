@@ -10,6 +10,7 @@
 
 void init();
 void display_text(char *str);
+void display_integer(int num);
 void set_cursor(int position);
 
 #endif

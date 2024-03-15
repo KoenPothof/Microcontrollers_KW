@@ -5,39 +5,40 @@
 
 int main (void){
 	
-	init();
-	set_cursor(2);
-	display_text("Begin");
-	
 	DDRD = 0b11111111;
 	PORTE = 0x01;
 	PORTG = 0x01;
 	
+	init();
+	set_cursor(5);
+	
 	int i = 0;
+	display_integer(i);
+	
 	while (1) {
 		_delay_ms(100);
 		if(PINE == 1 && PING == 1){
+			while(PINE == 1 && PING == 1){
+				_delay_ms(10);
+			}
 			i = 0;
-			_delay_ms(400);
 			init();
-			display_text("e en f ingedrukt");
-			_delay_ms(500);
+			display_integer(i);
 		}else if(PINE == 1){
+			while(PINE == 1){
+				_delay_ms(10);
+			}
 			i++;
-			_delay_ms(400);
 			init();
-			display_text("e ingedrukt");
-			_delay_ms(500);
+			display_integer(i);
 	}else if(PING == 1 && i > 0){
-		i--;
-		_delay_ms(400);
-		init();
-		display_text("f ingedrukt");
-		_delay_ms(500);
-	}
-		if(i>15){
-			i = 16;
+		while(PING == 1){
+			_delay_ms(10);
 		}
+		i--;
+		init();
+		display_integer(i);
+	}
 	}
 	return 1;
 }

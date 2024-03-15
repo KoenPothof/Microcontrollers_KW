@@ -67,6 +67,12 @@ void display_text(char *str) {
 	}
 }
 
+void display_integer(int num) {
+	char buffer[16]; // Buffer voor de omgezette tekenreeks
+	sprintf(buffer, "%d", num); // Omzetten van integer naar tekenreeks
+	display_text(buffer); // Weergeven van de tekenreeks op het LCD-scherm
+}
+
 void lcd_write_command(unsigned char byte)
 
 {
