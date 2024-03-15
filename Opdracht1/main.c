@@ -14,14 +14,15 @@
 
 int main(void)
 {
-	DDRD = 0xFF;
-    
-    while (1) 
-    {
-		PORTD = 0b11000000;
-		_delay_ms(500);
-		PORTD = 0b00000000;
-		_delay_ms(500);
-    }
+	DDRD = 0xFF; // Stel alle pinnen van Port D in als uitgangen
+	
+	while (1)
+	{
+		PORTD = 0b11000000; // Zet PD7 en PD6 hoog, andere pinnen laag
+		_delay_ms(500); // Vertraging van 500 milliseconden
+		PORTD = 0b00000000; // Zet alle pinnen laag
+		_delay_ms(500); // Vertraging van 500 milliseconden
+	}
 	return 0;
 }
+

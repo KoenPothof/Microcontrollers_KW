@@ -8,8 +8,8 @@
 #ifndef MYMATH_H
 #define MYMATH_H
 
-void init();
-void display_text(char *str);
-void set_cursor(int position);
+void init(); // Initialisatiefunctie
+void display_text(char *str); // Functie om tekst weer te geven op het LCD-scherm
+void set_cursor(int position); // Functie om de cursorpositie in te stellen op het LCD-scherm
 
 #endif

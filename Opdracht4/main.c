@@ -16,6 +16,7 @@
 
 int main(void)
 {
+	// Instellen van alle poorten als uitgangen
 	DDRA = 0xFF;
 	DDRB = 0xFF;
 	DDRC = 0xFF;
@@ -23,20 +24,24 @@ int main(void)
 	DDRE = 0xFF;
 	DDRF = 0xFF;
 	DDRG = 0xFF;
+
+	// Definitie van een 2D-array om pinconfiguraties op te slaan
 	int pinArray[8][8] = {
-	{1, 1, 0, 0, 1, 1, 0}, 
-	{0, 1, 1, 0, 0, 1, 1},
-	{1, 0, 1, 1, 0, 0, 1},
-	{1, 1, 0, 1, 1, 0, 0},
-	{0, 1, 1, 0, 1, 1, 0},
-	{0, 0, 1, 1, 0, 1, 1},
-	{1, 0, 0, 1, 1, 0, 1},
+		{1, 1, 0, 0, 1, 1, 0}, // Voorbeeldrij 1
+		{0, 1, 1, 0, 0, 1, 1}, // Voorbeeldrij 2
+		{1, 0, 1, 1, 0, 0, 1}, // Voorbeeldrij 3
+		{1, 1, 0, 1, 1, 0, 0}, // Voorbeeldrij 4
+		{0, 1, 1, 0, 1, 1, 0}, // Voorbeeldrij 5
+		{0, 0, 1, 1, 0, 1, 1}, // Voorbeeldrij 6
+		{1, 0, 0, 1, 1, 0, 1}, // Voorbeeldrij 7
 	};
-	
+
 	while (1)
 	{
-		for(int row = 0; row <= 6; row ++) 
+		// Itereer door elke rij in pinArray
+		for(int row = 0; row <= 6; row ++)
 		{
+			// Stel de uitgangen van elke poort in op basis van de huidige rij in pinArray
 			PORTA = pinArray[row][0];
 			PORTB = pinArray[row][1];
 			PORTC = pinArray[row][2];
@@ -44,6 +49,8 @@ int main(void)
 			PORTE = pinArray[row][4];
 			PORTF = pinArray[row][5];
 			PORTG = pinArray[row][6];
+
+			// Wacht voor een korte periode
 			_delay_ms(150);
 		}
 	}
