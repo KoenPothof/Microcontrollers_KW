@@ -1,7 +1,7 @@
 /*
- * 4.B.1.c
+ * 4.B.2.c
  *
- * Created: 3/15/2024 11:21:02
+ * Created: 3/22/2024 10:50:09
  * Author : koenp
  */ 
 
@@ -9,6 +9,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
+// Functie om de ADC in te stellen
 void initADC() {
 	// Stel de deelfactor in op 64 (prescaler = 64)
 	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
@@ -32,24 +33,42 @@ uint16_t readADC(uint8_t channel) {
 	return ADC;
 }
 
+// Functie om de ADC-waarde om te zetten in LED-output op poort A en B
+void showADCValueOnLEDs(uint16_t adcValue) {
+	// Zet de ADC-waarde om naar een waarde tussen 0 en 1023
+	uint16_t scaledValue = adcValue;
+
+	// Zet de LED-output op poort A
+	PORTA = scaledValue;
+
+	// Zet de LED-output op poort B
+	PORTB = scaledValue;
+}
+
 int main() {
 	// Initialiseer de ADC
 	initADC();
 
-	// Definieer variabelen om de resultaten op te slaan
+	// Zet poort A en B als uitgangen voor de LED's
+	DDRA = 0xFF;
+	DDRB = 0xFF;
+
+	
 	uint16_t adcResult;
 
-	// Hoofdprogramma
+
 	while (1) {
-		// Lees de ADC-waarde van het gekozen kanaal (bijvoorbeeld kanaal 0)
-		adcResult = readADC(0);
+		// Lees de ADC-waarde van kanaal 1
+		adcResult = readADC(1);
 		
-		// Voer hier verdere bewerkingen uit met de ADC-waarde
-		
+		// Toon de ADC-waarde op de LED's van poort A en B
+		showADCValueOnLEDs(adcResult);
+
 		// Wacht een korte periode voordat de volgende meting wordt uitgevoerd
-		_delay_ms(1000);
+		_delay_ms(100);
 	}
 
 	return 0;
 }
+
 
