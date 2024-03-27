@@ -1,14 +1,14 @@
 /*
- * lcd.c
+ * lcdView.c
  *
- * Created: 3/27/2024 15:29:15
+ * Created: 3/27/2024 16:25:46
  *  Author: koenp
  */ 
 
 #define F_CPU 8e6
 #include <avr/io.h>
 #include <util/delay.h>
-#include "lcd.h"
+#include "lcdView.h"
 #include <string.h>
 
 #define LCD_E 	3

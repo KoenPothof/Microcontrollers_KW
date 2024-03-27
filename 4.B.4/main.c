@@ -5,12 +5,11 @@
  * Author : koenp
  */ 
 
-#include <xc.h>
 #define F_CPU 8e6
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
-#include "lcd.h"
+#include "lcdView.h"
 #include <stdio.h>
 
 #define BIT(x)	(1 << (x))
@@ -35,7 +34,6 @@ void wait( int ms )
 int main( void ) {
 	DDRF = 0x00;				// set PORTF for input (ADC)
 	DDRA = 0xFF;				// set PORTA for output
-	//DDRB = 0xFF;				// set PORTB for output
 	adcInit();					// initialize ADC
 	lcd_init();					// Init lcd
 
@@ -44,7 +42,7 @@ int main( void ) {
 		PORTA = ADCH;
 		
 		char temp[10];
-		sprintf(temp, "%d    ", ADCH);	//Give temp the value of ADCH in string form
+		sprintf("%d    ", ADCH);	//Give temp the value of ADCH in string form
 		lcd_set_cursor(0);				//Reset cursor
 		lcd_display_text(temp);			//Display temp on lcd
 		

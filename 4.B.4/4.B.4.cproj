@@ -122,7 +122,10 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="lcd.c">
+    <Compile Include="lcdView.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="lcdView.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

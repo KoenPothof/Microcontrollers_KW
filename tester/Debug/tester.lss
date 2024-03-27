@@ -3,29 +3,27 @@ tester.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  0000013e  2**0
+  0 .data         00000000  00800100  00800100  000000fc  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000000ea  00000000  00000000  00000054  2**1
+  1 .text         000000a8  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  0000013e  2**0
+  2 .comment      00000030  00000000  00000000  000000fc  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000170  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  0000012c  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000030  00000000  00000000  000001ac  2**0
+  4 .debug_aranges 00000020  00000000  00000000  00000168  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000903  00000000  00000000  000001dc  2**0
+  5 .debug_info   000007fc  00000000  00000000  00000188  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 00000846  00000000  00000000  00000adf  2**0
+  6 .debug_abbrev 0000075e  00000000  00000000  00000984  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   000002f5  00000000  00000000  00001325  2**0
+  7 .debug_line   000001a9  00000000  00000000  000010e2  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  00000044  00000000  00000000  0000161c  2**2
+  8 .debug_frame  00000024  00000000  00000000  0000128c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000412  00000000  00000000  00001660  2**0
+  9 .debug_str    000003b2  00000000  00000000  000012b0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000006a  00000000  00000000  00001a72  2**0
-                  CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000020  00000000  00000000  00001adc  2**0
+ 10 .debug_ranges 00000010  00000000  00000000  00001662  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -109,94 +107,24 @@ Disassembly of section .text:
   92:	d0 e1       	ldi	r29, 0x10	; 16
   94:	de bf       	out	0x3e, r29	; 62
   96:	cd bf       	out	0x3d, r28	; 61
-  98:	16 d0       	rcall	.+44     	; 0xc6 <main>
-  9a:	25 c0       	rjmp	.+74     	; 0xe6 <_exit>
+  98:	02 d0       	rcall	.+4      	; 0x9e <main>
+  9a:	04 c0       	rjmp	.+8      	; 0xa4 <_exit>
 
 0000009c <__bad_interrupt>:
   9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
 
-0000009e <wait>:
+0000009e <main>:
+#include <util/delay.h>
+#include <avr/interrupt.h>
 
-// wait(): busy waiting for 'ms' millisecond
-// Used library: util/delay.h
-void wait( int ms )
-{
-	for (int tms=0; tms<ms; tms++)
-  9e:	20 e0       	ldi	r18, 0x00	; 0
-  a0:	30 e0       	ldi	r19, 0x00	; 0
-  a2:	08 c0       	rjmp	.+16     	; 0xb4 <wait+0x16>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+ int main( void ) {
+	 return 0;
+  9e:	80 e0       	ldi	r24, 0x00	; 0
+  a0:	90 e0       	ldi	r25, 0x00	; 0
+  a2:	08 95       	ret
 
-	__builtin_avr_delay_cycles(__ticks_dc);
-  a4:	ef ec       	ldi	r30, 0xCF	; 207
-  a6:	f7 e0       	ldi	r31, 0x07	; 7
-  a8:	31 97       	sbiw	r30, 0x01	; 1
-  aa:	f1 f7       	brne	.-4      	; 0xa8 <wait+0xa>
-  ac:	00 c0       	rjmp	.+0      	; 0xae <wait+0x10>
-  ae:	00 00       	nop
-  b0:	2f 5f       	subi	r18, 0xFF	; 255
-  b2:	3f 4f       	sbci	r19, 0xFF	; 255
-  b4:	28 17       	cp	r18, r24
-  b6:	39 07       	cpc	r19, r25
-  b8:	ac f3       	brlt	.-22     	; 0xa4 <wait+0x6>
-	{
-		_delay_ms( 1 );			// library function (max 30 ms at 8MHz)
-	}
-}
-  ba:	08 95       	ret
+000000a4 <_exit>:
+  a4:	f8 94       	cli
 
-000000bc <adcInit>:
-
-
-// Initialize ADC:
-void adcInit( void )
-{
-	ADMUX = 0b11100001;			// AREF=2,56 V, result left adjusted, channel1 at pin PF1
-  bc:	81 ee       	ldi	r24, 0xE1	; 225
-  be:	87 b9       	out	0x07, r24	; 7
-	ADCSRA = 0b10000110;		// ADC-enable, no interrupt, no free running, division by 64
-  c0:	86 e8       	ldi	r24, 0x86	; 134
-  c2:	86 b9       	out	0x06, r24	; 6
-  c4:	08 95       	ret
-
-000000c6 <main>:
-
-
-// Main program: Counting on T1
-int main( void )
-{
-	DDRF = 0x00;					// set PORTF for input (ADC)
-  c6:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <__TEXT_REGION_LENGTH__+0x7e0061>
-	DDRA = 0xFF;					// set PORTA for output
-  ca:	8f ef       	ldi	r24, 0xFF	; 255
-  cc:	8a bb       	out	0x1a, r24	; 26
-	adcInit();						// initialize ADC
-  ce:	f6 df       	rcall	.-20     	; 0xbc <adcInit>
-
-	while (1)
-	{
-		ADCSRA |= BIT(6);				// Start ADC
-  d0:	86 b1       	in	r24, 0x06	; 6
-  d2:	80 64       	ori	r24, 0x40	; 64
-  d4:	86 b9       	out	0x06, r24	; 6
-		while ( ADCSRA & BIT(6) ) ;		// Wait for completion
-  d6:	36 99       	sbic	0x06, 6	; 6
-  d8:	fe cf       	rjmp	.-4      	; 0xd6 <main+0x10>
-		PORTA = ADCH;					// Show MSB (bit 9:2) of ADC
-  da:	85 b1       	in	r24, 0x05	; 5
-  dc:	8b bb       	out	0x1b, r24	; 27
-		wait(500);						// every 50 ms (busy waiting)
-  de:	84 ef       	ldi	r24, 0xF4	; 244
-  e0:	91 e0       	ldi	r25, 0x01	; 1
-  e2:	dd df       	rcall	.-70     	; 0x9e <wait>
-	}
-  e4:	f5 cf       	rjmp	.-22     	; 0xd0 <main+0xa>
-
-000000e6 <_exit>:
-  e6:	f8 94       	cli
-
-000000e8 <__stop_program>:
-  e8:	ff cf       	rjmp	.-2      	; 0xe8 <__stop_program>
+000000a6 <__stop_program>:
+  a6:	ff cf       	rjmp	.-2      	; 0xa6 <__stop_program>
