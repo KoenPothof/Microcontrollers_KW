@@ -1,18 +1,56 @@
+#define F_CPU 8e6
 #include <avr/io.h>
+#include <util/delay.h>
+#include <avr/interrupt.h>
+#include <stdio.h>
 
-int main(void) {
-	DDRD |= (1 << 7); // Set LED as output
-	TCCR1B |= (1 << CS10); // Set up timer
+#define BIT(x)    (1 << (x))
 
-	for (;;) {
-		// Check timer value in if statement, true when count matches 15 ms
-		if (TCNT1 >= 15000 && TCNT1 < 40000) {
-			PORTD &= ~(1 << 7); // Turn the LED off
-			} else if (TCNT1 >= 40000) {
-			PORTD |= (1 << 7); // Turn the LED on
-			TCNT1 = 0; // Reset timer value
-		}
+void wait( int ms );
+void adcInit( void );
+
+
+int main( void ) {
+	DDRF = 0x00;                    // set PORTF for input (ADC)
+	DDRA = 0xFF;                    // set PORTA for output
+	adcInit();                        // initialize ADC
+
+	while (1)
+	{
+		ADCSRA |= BIT(6);                // Start ADC
+		while ( ADCSRA & BIT(6) ) ;        // Wait for completion
+		PORTA = ADCH;                    // Show MSB (bit 9:2) of ADC
+		wait(500);                        // every 50 ms (busy waiting)
 	}
+}
 
-	return 0;
+int opdrachtb2( void )
+{
+	DDRF = 0x00;                    // set PORTF for input (ADC)
+	DDRA = 0xFF;                    // set PORTA for output
+	adcInit();                        // initialize ADC
+
+	while (1)
+	{
+		ADCSRA |= BIT(6);                // Start ADC
+		while ( ADCSRA & BIT(6) ) ;        // Wait for completion
+		PORTA = ADCH;                    // Show MSB (bit 9:2) of ADC
+		wait(500);                        // every 50 ms (busy waiting)
+	}
+}
+
+// Initialize ADC: 10-bits (left justified), free running
+// Initialize ADC:
+void adcInit( void )
+{
+	ADMUX = 0b11100011;            // AREF=VCC, result left adjusted, channel1 at pin PF1
+	ADCSRA = 0b11100110;        // ADC-enable, no interrupt, start, free running, division by 64
+}
+
+void wait( int ms )
+{
+	for (int tms=0; tms<ms; tms++)
+	{
+		_delay_ms( 1 );            // library function (max 30 ms at 8MHz)
+	}
 }
