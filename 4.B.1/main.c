@@ -5,51 +5,44 @@
  * Author : koenp
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 8e6
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
-void initADC() {
-	// Stel de deelfactor in op 64 (prescaler = 64)
-	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
-	// Stel de referentiespanning in op VCC
-	ADMUX |= (1 << REFS0);
-	// Kies 'hoge byte gevuld' voor de AD-waarden
-	ADMUX |= (1 << ADLAR);
-	// Enable de ADC
-	ADCSRA |= (1 << ADEN);
-}
+#define BIT(x)	(1 << (x))
 
-// Functie om een ADC conversie te starten en te wachten op voltooiing
-uint16_t readADC(uint8_t channel) {
-	// Kies het juiste kanaal in ADMUX
-	ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);
-	// Start de ADC conversie
-	ADCSRA |= (1 << ADSC);
-	// Wacht tot de conversie voltooid is
-	while (ADCSRA & (1 << ADSC));
-	// Geef de resultaten terug
-	return ADC;
-}
-
-int main() {
-	// Initialiseer de ADC
-	initADC();
-
-	// Definieer variabelen om de resultaten op te slaan
-	uint16_t adcResult;
-
-	// Hoofdprogramma
-	while (1) {
-		// Lees de ADC-waarde van het gekozen kanaal (bijvoorbeeld kanaal 0)
-		adcResult = readADC(0);
-		
-		// Voer hier verdere bewerkingen uit met de ADC-waarde
-		
-		// Wacht een korte periode voordat de volgende meting wordt uitgevoerd
-		_delay_ms(1000);
+// wait(): busy waiting for 'ms' millisecond
+// Used library: util/delay.h
+void wait( int ms )
+{
+	for (int tms=0; tms<ms; tms++)
+	{
+		_delay_ms( 1 );			// library function (max 30 ms at 8MHz)
 	}
-
-	return 0;
 }
 
+
+// Initialize ADC: 10-bits (left justified), free running
+void adcInit( void )
+{
+	ADMUX = 0b01100001;			// AREF=VCC, result left adjusted, channel1 at pin PF1
+	ADCSRA = 0b11100110;		// ADC-enable, no interrupt, start, free running, division by 64
+}
+
+
+// Main program: ADC at PF1
+int main( void )
+{
+	DDRF = 0x00;				// set PORTF for input (ADC)
+	DDRA = 0xFF;				// set PORTA for output
+	DDRB = 0xFF;				// set PORTB for output
+	adcInit();					// initialize ADC
+
+	while (1)
+	{
+		PORTB = ADCL;			// Show MSB/LSB (bit 10:0) of ADC
+		PORTA = ADCH;
+		wait(100);				// every 100 ms (busy waiting)
+	}
+}

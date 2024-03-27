@@ -21,11 +21,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   8 .debug_frame  00000034  00000000  00000000  000016cc  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    00000461  00000000  00000000  00001700  2**0
+  9 .debug_str    0000043a  00000000  00000000  00001700  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    0000008e  00000000  00000000  00001b61  2**0
+ 10 .debug_loc    0000008e  00000000  00000000  00001b3a  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000018  00000000  00000000  00001bef  2**0
+ 11 .debug_ranges 00000018  00000000  00000000  00001bc8  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -131,12 +131,12 @@ Disassembly of section .text:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
 
 000000b8 <wait>:
-	{0b00000001, 250},
-	{0b00000000, 250},
+	{0b00000000, 250}, // Patroon 19: 0b00000000, vertraging 250 ms
 };
 
-void wait( int ms ) {
-	for (int i=0; i<ms; i++) {
+// Functie om te wachten voor een opgegeven aantal milliseconden
+void wait(int ms) {
+	for (int i = 0; i < ms; i++) {
   b8:	20 e0       	ldi	r18, 0x00	; 0
   ba:	30 e0       	ldi	r19, 0x00	; 0
   bc:	08 c0       	rjmp	.+16     	; 0xce <wait+0x16>
@@ -157,24 +157,26 @@ void wait( int ms ) {
   ce:	28 17       	cp	r18, r24
   d0:	39 07       	cpc	r19, r25
   d2:	ac f3       	brlt	.-22     	; 0xbe <wait+0x6>
-		_delay_ms( 1 );
+		_delay_ms(1); // Wacht 1 milliseconde
 	}
 }
   d4:	08 95       	ret
 
 000000d6 <main>:
 
-int main( void ) {
-	DDRD = 0b11111111;	
+int main(void) {
+	DDRD = 0b11111111; // Stel alle pinnen van Port D in als uitgangen
   d6:	8f ef       	ldi	r24, 0xFF	; 255
   d8:	81 bb       	out	0x11, r24	; 17
-	while (1==1) {
+
+	while (1 == 1) {
 		int index = 0;
   da:	c0 e0       	ldi	r28, 0x00	; 0
   dc:	d0 e0       	ldi	r29, 0x00	; 0
-		while( index < 19) {
+
+		while (index < 19) { // Itereer door alle patronen in de array
   de:	0d c0       	rjmp	.+26     	; 0xfa <main+0x24>
-			PORTD = pattern[index].data;
+			PORTD = pattern[index].data; // Stel de data van het huidige patroon in op Port D
   e0:	fe 01       	movw	r30, r28
   e2:	ee 0f       	add	r30, r30
   e4:	ff 1f       	adc	r31, r31
@@ -184,18 +186,18 @@ int main( void ) {
   ec:	ff 4f       	sbci	r31, 0xFF	; 255
   ee:	80 81       	ld	r24, Z
   f0:	82 bb       	out	0x12, r24	; 18
-			wait(pattern[index].delay);
+			wait(pattern[index].delay); // Wacht de opgegeven vertraging voor het huidige patroon
   f2:	81 81       	ldd	r24, Z+1	; 0x01
   f4:	92 81       	ldd	r25, Z+2	; 0x02
   f6:	e0 df       	rcall	.-64     	; 0xb8 <wait>
 			index++;
   f8:	21 96       	adiw	r28, 0x01	; 1
+	DDRD = 0b11111111; // Stel alle pinnen van Port D in als uitgangen
 
-int main( void ) {
-	DDRD = 0b11111111;	
-	while (1==1) {
+	while (1 == 1) {
 		int index = 0;
-		while( index < 19) {
+
+		while (index < 19) { // Itereer door alle patronen in de array
   fa:	c3 31       	cpi	r28, 0x13	; 19
   fc:	d1 05       	cpc	r29, r1
   fe:	84 f3       	brlt	.-32     	; 0xe0 <main+0xa>

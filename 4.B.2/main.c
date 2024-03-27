@@ -5,70 +5,47 @@
  * Author : koenp
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 8e6
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
-// Functie om de ADC in te stellen
-void initADC() {
-	// Stel de deelfactor in op 64 (prescaler = 64)
-	ADCSRA |= (1 << ADPS2) | (1 << ADPS1);
-	// Stel de referentiespanning in op VCC
-	ADMUX |= (1 << REFS0);
-	// Kies 'hoge byte gevuld' voor de AD-waarden
-	ADMUX |= (1 << ADLAR);
-	// Enable de ADC
-	ADCSRA |= (1 << ADEN);
-}
+#define BIT(x)	(1 << (x))
 
-// Functie om een ADC conversie te starten en te wachten op voltooiing
-uint16_t readADC(uint8_t channel) {
-	// Kies het juiste kanaal in ADMUX
-	ADMUX = (ADMUX & 0xF0) | (channel & 0x0F);
-	// Start de ADC conversie
-	ADCSRA |= (1 << ADSC);
-	// Wacht tot de conversie voltooid is
-	while (ADCSRA & (1 << ADSC));
-	// Geef de resultaten terug
-	return ADC;
-}
-
-// Functie om de ADC-waarde om te zetten in LED-output op poort A en B
-void showADCValueOnLEDs(uint16_t adcValue) {
-	// Zet de ADC-waarde om naar een waarde tussen 0 en 1023
-	uint16_t scaledValue = adcValue;
-
-	// Zet de LED-output op poort A
-	PORTA = scaledValue;
-
-	// Zet de LED-output op poort B
-	PORTB = scaledValue;
-}
-
-int main() {
-	// Initialiseer de ADC
-	initADC();
-
-	// Zet poort A en B als uitgangen voor de LED's
-	DDRA = 0xFF;
-	DDRB = 0xFF;
-
-	
-	uint16_t adcResult;
-
-
-	while (1) {
-		// Lees de ADC-waarde van kanaal 1
-		adcResult = readADC(1);
-		
-		// Toon de ADC-waarde op de LED's van poort A en B
-		showADCValueOnLEDs(adcResult);
-
-		// Wacht een korte periode voordat de volgende meting wordt uitgevoerd
-		_delay_ms(100);
+// wait(): busy waiting for 'ms' millisecond
+// Used library: util/delay.h
+void wait( int ms )
+{
+	for (int tms=0; tms<ms; tms++)
+	{
+		_delay_ms( 1 );			// library function (max 30 ms at 8MHz)
 	}
-
-	return 0;
 }
 
 
+// Initialize ADC:
+void adcInit( void )
+{
+	ADMUX = 0b11100001;			// AREF=2,56 V, result left adjusted, channel1 at pin PF1
+	ADCSRA = 0b10000110;		// ADC-enable, no interrupt, no free running, division by 64
+}
+
+
+// Main program: Counting on T1
+int main( void )
+{
+	DDRF = 0x00;					// set PORTF for input (ADC)
+	DDRA = 0xFF;					// set PORTA for output
+	DDRB = 0xFF;					// set PORTB for output
+	adcInit();						// initialize ADC
+
+	while (1)
+	{
+		ADCSRA |= BIT(6);				// Start ADC
+		while ( ADCSRA & BIT(6) ) ;		// Wait for completion
+		PORTB = ADCH;
+		PORTA = ADCH;					// Show MSB (bit 9:2) of ADC
+		
+		wait(500);						// every 50 ms (busy waiting)
+	}
+}

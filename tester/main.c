@@ -5,32 +5,21 @@
  * Author : koenp
  */ 
 
-#define F_CPU 8000000UL
+#define F_CPU 8e6
 #include <avr/io.h>
 #include <util/delay.h>
+#include <avr/interrupt.h>
 
-void setupADC()
-{
-	DDRF &= ~(1<<PF0); // PORTF.0 input ADC
-	DDRA = 0xFF; // PORTA outputs for displaying ADC value
-	DDRB = 0xFF; // PORTB outputs for displaying ADC value
-	// MUX4..0 = 00000 = ADC0
-	// ADLAR = 1 Left adjust, AVCC with external capacitor at AREF
+#include <built_in.h>
+unsigned int adc_rd;
+
+void main() {
+	DDRB = 0xFF;               // Set PORTB as output
+	DDRC = 0xFF;               // Set PORTC as output
 	
-	ADMUX = 0b01100000;
-	// ADEN: ADC Enable, ADSC: ADC Start Conversion
-	// ADFR: ADC Free Running Select
-	// ADC Prescaler Select Bits : Division Factor = 64
-	ADCSRA = 0b11100110;
-}
-int main(void)
-{
-	setupADC();
-	/* Replace with your application code */
-	while (1)
-	{
-		PORTA = ADCL;
-		PORTB = ADCH;
-		_delay_ms(100);
+	while (1) {
+		adc_rd = ADC_Read(2);    // get ADC value from 2nd channel
+		PORTB = adc_rd;          // display adc_rd[7..0]
+		PORTC = Hi(adc_rd);      // display adc_rd[9..8]
 	}
 }
