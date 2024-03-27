@@ -18,34 +18,31 @@ void wait( int ms )
 {
 	for (int tms=0; tms<ms; tms++)
 	{
-		_delay_ms( 1 );			// library function (max 30 ms at 8MHz)
+		_delay_ms( 1 );			// bibliotheekfunctie (max 30 ms bij 8 MHz)
 	}
 }
 
 
-// Initialize ADC:
+// Initialiseer ADC:
 void adcInit( void )
 {
-	ADMUX = 0b11100001;			// AREF=2,56 V, result left adjusted, channel1 at pin PF1
-	ADCSRA = 0b10000110;		// ADC-enable, no interrupt, no free running, division by 64
+	ADMUX = 0b01100001;			// AREF=VCC, resultaat links uitgelijnd, kanaal 1 op pin PF1
+	ADCSRA = 0b11100110;		// ADC-inschakelen, geen onderbreking, geen start, geen vrije loop, deling door 64
 }
 
 
-// Main program: Counting on T1
+// Hoofdprogramma: tellen op T1
 int main( void )
 {
-	DDRF = 0x00;					// set PORTF for input (ADC)
-	DDRA = 0xFF;					// set PORTA for output
-	DDRB = 0xFF;					// set PORTB for output
+	DDRF = 0x00;					// stel PORTF in als invoer (ADC)
+	DDRA = 0xFF;					// stel PORTA in als uitvoer
+    DDRB = 0xFF;					// stel PORTB in als uitvoer
 	adcInit();						// initialize ADC
-
+    
 	while (1)
 	{
-		ADCSRA |= BIT(6);				// Start ADC
-		while ( ADCSRA & BIT(6) ) ;		// Wait for completion
-		PORTB = ADCH;
-		PORTA = ADCH;					// Show MSB (bit 9:2) of ADC
-		
-		wait(500);						// every 50 ms (busy waiting)
+		PORTB = ADCL;			// Toon MSB/LSB (bit 10:0) van ADC
+		PORTA = ADCH;			// Toon bit 8:0 van ADC
+		wait(100);				// elke 100 ms (bezig met wachten)
 	}
 }
