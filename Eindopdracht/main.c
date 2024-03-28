@@ -10,6 +10,9 @@
 #define SPI_MISO	3						// PB3: spi Pin MISO
 #define SPI_SS		0						// PB0: spi Pin Slave Select
 
+
+double seconden = 0;
+
 // wait(): busy waiting for 'ms' millisecond
 // used library: util/delay.h
 void wait(int ms)
@@ -165,8 +168,8 @@ void writeLedDisplay(int value){
 }
 
 void timerStart(){
+	PORTC = 0x01;
 	TCCR1B |= ((1 << CS10 ) | (1 << CS11 )); // maak timer Fcpu/64
-	double seconden = 0;
 
 	for (;;) {
 		// Wacht tot de timer op 1 seconden zit, dan true
@@ -174,6 +177,9 @@ void timerStart(){
 			TCNT1 = 0; // Reset timer
 			seconden+=0.5;
 			writeLedDisplay(seconden);
+		}
+		if(PINC == 1){
+			seconden = 0;
 		}
 	}
 }
@@ -184,8 +190,10 @@ int main()
 	DDRB=0x01;					  	// Set PB0 pin as output for display select
 	spi_masterInit();              	// Initialize spi module
 	displayDriverInit();            // Initialize display chip
+	timerStart();
+		
 	
-	timerStart();	
+		
 	
 	return (1);
 }
