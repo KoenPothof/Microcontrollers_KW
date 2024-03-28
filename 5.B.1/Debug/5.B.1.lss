@@ -3,29 +3,29 @@
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00800100  000003fe  2**0
+  0 .data         00000000  00800100  00800100  0000039c  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         000003aa  00000000  00000000  00000054  2**1
+  1 .text         00000348  00000000  00000000  00000054  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .comment      00000030  00000000  00000000  000003fe  2**0
+  2 .comment      00000030  00000000  00000000  0000039c  2**0
                   CONTENTS, READONLY
-  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000430  2**2
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000003cc  2**2
                   CONTENTS, READONLY
-  4 .debug_aranges 00000078  00000000  00000000  0000046c  2**0
+  4 .debug_aranges 00000078  00000000  00000000  00000408  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_info   00000dbb  00000000  00000000  000004e4  2**0
+  5 .debug_info   00000e0b  00000000  00000000  00000480  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_abbrev 000008da  00000000  00000000  0000129f  2**0
+  6 .debug_abbrev 000008da  00000000  00000000  0000128b  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_line   00000581  00000000  00000000  00001b79  2**0
+  7 .debug_line   00000537  00000000  00000000  00001b65  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_frame  000000fc  00000000  00000000  000020fc  2**2
+  8 .debug_frame  00000100  00000000  00000000  0000209c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    000004f7  00000000  00000000  000021f8  2**0
+  9 .debug_str    000004f7  00000000  00000000  0000219c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    000006e7  00000000  00000000  000026ef  2**0
+ 10 .debug_loc    00000628  00000000  00000000  00002693  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000068  00000000  00000000  00002dd6  2**0
+ 11 .debug_ranges 00000068  00000000  00000000  00002cbb  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -109,8 +109,8 @@ Disassembly of section .text:
   92:	d0 e1       	ldi	r29, 0x10	; 16
   94:	de bf       	out	0x3e, r29	; 62
   96:	cd bf       	out	0x3d, r28	; 61
-  98:	52 d1       	rcall	.+676    	; 0x33e <main>
-  9a:	85 c1       	rjmp	.+778    	; 0x3a6 <_exit>
+  98:	21 d1       	rcall	.+578    	; 0x2dc <main>
+  9a:	54 c1       	rjmp	.+680    	; 0x344 <_exit>
 
 0000009c <__bad_interrupt>:
   9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
@@ -119,7 +119,7 @@ Disassembly of section .text:
 }
 
 // Set display off ('shut down')
-void displayOff() 
+void displayOff()
 {
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
   9e:	20 e0       	ldi	r18, 0x00	; 0
@@ -220,539 +220,434 @@ void displayOff()
 }
 
 void writeLedDisplay(int value){
- 140:	ff 92       	push	r15
- 142:	0f 93       	push	r16
- 144:	1f 93       	push	r17
- 146:	cf 93       	push	r28
- 148:	df 93       	push	r29
- 14a:	9c 01       	movw	r18, r24
-	int digit2 = -1;
-	int digit3 = -1;
-	char digit4 = -1;
-	
-	
-	if (value < 10 && value >= 0){
- 14c:	8a 30       	cpi	r24, 0x0A	; 10
- 14e:	91 05       	cpc	r25, r1
- 150:	40 f4       	brcc	.+16     	; 0x162 <writeLedDisplay+0x22>
-		digit4 = value;
- 152:	f8 2e       	mov	r15, r24
-
-void writeLedDisplay(int value){
-	
+ 140:	ef 92       	push	r14
+ 142:	ff 92       	push	r15
+ 144:	0f 93       	push	r16
+ 146:	1f 93       	push	r17
+ 148:	cf 93       	push	r28
+ 14a:	df 93       	push	r29
+ 14c:	ec 01       	movw	r28, r24
 	int digit1 = -1;
 	int digit2 = -1;
 	int digit3 = -1;
- 154:	cf ef       	ldi	r28, 0xFF	; 255
- 156:	df ef       	ldi	r29, 0xFF	; 255
+	int digit4 = -1;
+	
+	if (value < 10 && value >= 0){
+ 14e:	8a 30       	cpi	r24, 0x0A	; 10
+ 150:	91 05       	cpc	r25, r1
+ 152:	08 f4       	brcc	.+2      	; 0x156 <writeLedDisplay+0x16>
+ 154:	50 c0       	rjmp	.+160    	; 0x1f6 <writeLedDisplay+0xb6>
+		digit4 = value;
+		} else if (value >= 10 && value < 100){
+ 156:	9c 01       	movw	r18, r24
+ 158:	2a 50       	subi	r18, 0x0A	; 10
+ 15a:	31 09       	sbc	r19, r1
+ 15c:	2a 35       	cpi	r18, 0x5A	; 90
+ 15e:	31 05       	cpc	r19, r1
+ 160:	50 f4       	brcc	.+20     	; 0x176 <writeLedDisplay+0x36>
+		digit4 = value / 10;
+ 162:	6a e0       	ldi	r22, 0x0A	; 10
+ 164:	70 e0       	ldi	r23, 0x00	; 0
+ 166:	c7 d0       	rcall	.+398    	; 0x2f6 <__divmodhi4>
+ 168:	eb 01       	movw	r28, r22
+ 16a:	7c 01       	movw	r14, r24
 }
 
 void writeLedDisplay(int value){
 	
 	int digit1 = -1;
 	int digit2 = -1;
- 158:	0f ef       	ldi	r16, 0xFF	; 255
- 15a:	1f ef       	ldi	r17, 0xFF	; 255
+ 16c:	0f ef       	ldi	r16, 0xFF	; 255
+ 16e:	1f ef       	ldi	r17, 0xFF	; 255
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
 	
 	int digit1 = -1;
- 15c:	6f ef       	ldi	r22, 0xFF	; 255
- 15e:	7f ef       	ldi	r23, 0xFF	; 255
- 160:	9b c0       	rjmp	.+310    	; 0x298 <writeLedDisplay+0x158>
-	char digit4 = -1;
-	
-	
+ 170:	6f ef       	ldi	r22, 0xFF	; 255
+ 172:	7f ef       	ldi	r23, 0xFF	; 255
+ 174:	51 c0       	rjmp	.+162    	; 0x218 <writeLedDisplay+0xd8>
 	if (value < 10 && value >= 0){
 		digit4 = value;
-	} else if (value >= 10 && value < 100){
- 162:	0a 97       	sbiw	r24, 0x0a	; 10
- 164:	8a 35       	cpi	r24, 0x5A	; 90
- 166:	91 05       	cpc	r25, r1
- 168:	60 f4       	brcc	.+24     	; 0x182 <writeLedDisplay+0x42>
-		digit4 = value / 10;
- 16a:	c9 01       	movw	r24, r18
- 16c:	6a e0       	ldi	r22, 0x0A	; 10
- 16e:	70 e0       	ldi	r23, 0x00	; 0
- 170:	f3 d0       	rcall	.+486    	; 0x358 <__divmodhi4>
- 172:	f6 2e       	mov	r15, r22
-		digit3 = value % 10;
- 174:	c8 2f       	mov	r28, r24
- 176:	d9 2f       	mov	r29, r25
-}
-
-void writeLedDisplay(int value){
-	
-	int digit1 = -1;
-	int digit2 = -1;
- 178:	0f ef       	ldi	r16, 0xFF	; 255
- 17a:	1f ef       	ldi	r17, 0xFF	; 255
-	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
-}
-
-void writeLedDisplay(int value){
-	
-	int digit1 = -1;
- 17c:	6f ef       	ldi	r22, 0xFF	; 255
- 17e:	7f ef       	ldi	r23, 0xFF	; 255
- 180:	8b c0       	rjmp	.+278    	; 0x298 <writeLedDisplay+0x158>
-	if (value < 10 && value >= 0){
-		digit4 = value;
-	} else if (value >= 10 && value < 100){
+		} else if (value >= 10 && value < 100){
 		digit4 = value / 10;
 		digit3 = value % 10;
-	} else if (value >= 100 && value < 1000){
- 182:	c9 01       	movw	r24, r18
- 184:	84 56       	subi	r24, 0x64	; 100
- 186:	91 09       	sbc	r25, r1
- 188:	84 38       	cpi	r24, 0x84	; 132
- 18a:	93 40       	sbci	r25, 0x03	; 3
- 18c:	a8 f4       	brcc	.+42     	; 0x1b8 <writeLedDisplay+0x78>
+		} else if (value >= 100 && value < 1000){
+ 176:	9c 01       	movw	r18, r24
+ 178:	24 56       	subi	r18, 0x64	; 100
+ 17a:	31 09       	sbc	r19, r1
+ 17c:	24 38       	cpi	r18, 0x84	; 132
+ 17e:	33 40       	sbci	r19, 0x03	; 3
+ 180:	b8 f4       	brcc	.+46     	; 0x1b0 <writeLedDisplay+0x70>
 		digit4 = value / 100;
- 18e:	c9 01       	movw	r24, r18
- 190:	64 e6       	ldi	r22, 0x64	; 100
- 192:	70 e0       	ldi	r23, 0x00	; 0
- 194:	e1 d0       	rcall	.+450    	; 0x358 <__divmodhi4>
- 196:	f6 2e       	mov	r15, r22
+ 182:	64 e6       	ldi	r22, 0x64	; 100
+ 184:	70 e0       	ldi	r23, 0x00	; 0
+ 186:	b7 d0       	rcall	.+366    	; 0x2f6 <__divmodhi4>
+ 188:	e6 2f       	mov	r30, r22
+ 18a:	47 2f       	mov	r20, r23
 		digit3 = (value / 10) % 10;
- 198:	ea e0       	ldi	r30, 0x0A	; 10
- 19a:	f0 e0       	ldi	r31, 0x00	; 0
- 19c:	c9 01       	movw	r24, r18
- 19e:	bf 01       	movw	r22, r30
- 1a0:	db d0       	rcall	.+438    	; 0x358 <__divmodhi4>
- 1a2:	38 2f       	mov	r19, r24
- 1a4:	29 2f       	mov	r18, r25
- 1a6:	cb 01       	movw	r24, r22
- 1a8:	bf 01       	movw	r22, r30
- 1aa:	d6 d0       	rcall	.+428    	; 0x358 <__divmodhi4>
- 1ac:	ec 01       	movw	r28, r24
+ 18c:	2a e0       	ldi	r18, 0x0A	; 10
+ 18e:	30 e0       	ldi	r19, 0x00	; 0
+ 190:	ce 01       	movw	r24, r28
+ 192:	b9 01       	movw	r22, r18
+ 194:	b0 d0       	rcall	.+352    	; 0x2f6 <__divmodhi4>
+ 196:	c8 2f       	mov	r28, r24
+ 198:	f9 2f       	mov	r31, r25
+ 19a:	cb 01       	movw	r24, r22
+ 19c:	b9 01       	movw	r22, r18
+ 19e:	ab d0       	rcall	.+342    	; 0x2f6 <__divmodhi4>
+ 1a0:	7c 01       	movw	r14, r24
 		digit2 = value % 10;
- 1ae:	03 2f       	mov	r16, r19
- 1b0:	12 2f       	mov	r17, r18
+ 1a2:	0c 2f       	mov	r16, r28
+ 1a4:	1f 2f       	mov	r17, r31
+		digit4 = value;
+		} else if (value >= 10 && value < 100){
+		digit4 = value / 10;
+		digit3 = value % 10;
+		} else if (value >= 100 && value < 1000){
+		digit4 = value / 100;
+ 1a6:	ce 2f       	mov	r28, r30
+ 1a8:	d4 2f       	mov	r29, r20
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
 	
 	int digit1 = -1;
- 1b2:	6f ef       	ldi	r22, 0xFF	; 255
- 1b4:	7f ef       	ldi	r23, 0xFF	; 255
- 1b6:	70 c0       	rjmp	.+224    	; 0x298 <writeLedDisplay+0x158>
+ 1aa:	6f ef       	ldi	r22, 0xFF	; 255
+ 1ac:	7f ef       	ldi	r23, 0xFF	; 255
+ 1ae:	34 c0       	rjmp	.+104    	; 0x218 <writeLedDisplay+0xd8>
 		digit3 = value % 10;
-	} else if (value >= 100 && value < 1000){
+		} else if (value >= 100 && value < 1000){
 		digit4 = value / 100;
 		digit3 = (value / 10) % 10;
 		digit2 = value % 10;
-	} else if (value >= 1000 && value < 10000){
- 1b8:	c9 01       	movw	r24, r18
- 1ba:	88 5e       	subi	r24, 0xE8	; 232
- 1bc:	93 40       	sbci	r25, 0x03	; 3
- 1be:	88 32       	cpi	r24, 0x28	; 40
- 1c0:	93 42       	sbci	r25, 0x23	; 35
-		digit4 = value / 1000; 
- 1c2:	d8 f4       	brcc	.+54     	; 0x1fa <writeLedDisplay+0xba>
- 1c4:	c9 01       	movw	r24, r18
- 1c6:	68 ee       	ldi	r22, 0xE8	; 232
- 1c8:	73 e0       	ldi	r23, 0x03	; 3
- 1ca:	c6 d0       	rcall	.+396    	; 0x358 <__divmodhi4>
-		digit3 = (value / 100) % 10; 
- 1cc:	f6 2e       	mov	r15, r22
- 1ce:	c9 01       	movw	r24, r18
- 1d0:	64 e6       	ldi	r22, 0x64	; 100
- 1d2:	70 e0       	ldi	r23, 0x00	; 0
- 1d4:	c1 d0       	rcall	.+386    	; 0x358 <__divmodhi4>
- 1d6:	cb 01       	movw	r24, r22
- 1d8:	ea e0       	ldi	r30, 0x0A	; 10
- 1da:	f0 e0       	ldi	r31, 0x00	; 0
- 1dc:	bf 01       	movw	r22, r30
- 1de:	bc d0       	rcall	.+376    	; 0x358 <__divmodhi4>
-		digit2 = (value / 10) % 10; 
- 1e0:	ec 01       	movw	r28, r24
- 1e2:	c9 01       	movw	r24, r18
- 1e4:	bf 01       	movw	r22, r30
- 1e6:	b8 d0       	rcall	.+368    	; 0x358 <__divmodhi4>
- 1e8:	38 2f       	mov	r19, r24
- 1ea:	29 2f       	mov	r18, r25
- 1ec:	cb 01       	movw	r24, r22
- 1ee:	bf 01       	movw	r22, r30
- 1f0:	b3 d0       	rcall	.+358    	; 0x358 <__divmodhi4>
- 1f2:	8c 01       	movw	r16, r24
-		digit1 = value % 10; 
- 1f4:	63 2f       	mov	r22, r19
- 1f6:	72 2f       	mov	r23, r18
- 1f8:	4f c0       	rjmp	.+158    	; 0x298 <writeLedDisplay+0x158>
-	}  else if (value < 0 && value > -10){
- 1fa:	c9 01       	movw	r24, r18
- 1fc:	09 96       	adiw	r24, 0x09	; 9
- 1fe:	09 97       	sbiw	r24, 0x09	; 9
- 200:	68 f4       	brcc	.+26     	; 0x21c <writeLedDisplay+0xdc>
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
- 202:	cc 27       	eor	r28, r28
- 204:	dd 27       	eor	r29, r29
- 206:	c2 1b       	sub	r28, r18
- 208:	d3 0b       	sbc	r29, r19
-		digit4 = value / 1000; 
-		digit3 = (value / 100) % 10; 
-		digit2 = (value / 10) % 10; 
-		digit1 = value % 10; 
-	}  else if (value < 0 && value > -10){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
- 20a:	0f 2e       	mov	r0, r31
- 20c:	ff e0       	ldi	r31, 0x0F	; 15
- 20e:	ff 2e       	mov	r15, r31
- 210:	f0 2d       	mov	r31, r0
-}
-
-void writeLedDisplay(int value){
-	
-	int digit1 = -1;
-	int digit2 = -1;
- 212:	0f ef       	ldi	r16, 0xFF	; 255
- 214:	1f ef       	ldi	r17, 0xFF	; 255
-	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
-}
-
-void writeLedDisplay(int value){
-	
-	int digit1 = -1;
- 216:	6f ef       	ldi	r22, 0xFF	; 255
- 218:	7f ef       	ldi	r23, 0xFF	; 255
- 21a:	3e c0       	rjmp	.+124    	; 0x298 <writeLedDisplay+0x158>
-		digit1 = value % 10; 
-	}  else if (value < 0 && value > -10){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
-		digit3 = value;
-	} else if (value <= -10 && value > -100){
- 21c:	c9 01       	movw	r24, r18
- 21e:	8d 59       	subi	r24, 0x9D	; 157
- 220:	9f 4f       	sbci	r25, 0xFF	; 255
- 222:	8a 35       	cpi	r24, 0x5A	; 90
- 224:	91 05       	cpc	r25, r1
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
- 226:	80 f4       	brcc	.+32     	; 0x248 <writeLedDisplay+0x108>
- 228:	88 27       	eor	r24, r24
- 22a:	99 27       	eor	r25, r25
- 22c:	82 1b       	sub	r24, r18
-		digit3 = value / 10;
-		digit2 = value % 10;
- 22e:	93 0b       	sbc	r25, r19
- 230:	6a e0       	ldi	r22, 0x0A	; 10
- 232:	70 e0       	ldi	r23, 0x00	; 0
- 234:	91 d0       	rcall	.+290    	; 0x358 <__divmodhi4>
- 236:	eb 01       	movw	r28, r22
- 238:	8c 01       	movw	r16, r24
-	}  else if (value < 0 && value > -10){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
-		digit3 = value;
-	} else if (value <= -10 && value > -100){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
- 23a:	0f 2e       	mov	r0, r31
- 23c:	ff e0       	ldi	r31, 0x0F	; 15
- 23e:	ff 2e       	mov	r15, r31
- 240:	f0 2d       	mov	r31, r0
-	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
-}
-
-void writeLedDisplay(int value){
-	
-	int digit1 = -1;
- 242:	6f ef       	ldi	r22, 0xFF	; 255
- 244:	7f ef       	ldi	r23, 0xFF	; 255
- 246:	28 c0       	rjmp	.+80     	; 0x298 <writeLedDisplay+0x158>
-	} else if (value <= -10 && value > -100){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
-		digit3 = value / 10;
-		digit2 = value % 10;
-	} else if (value <= -100 && value > -1000){
- 248:	c9 01       	movw	r24, r18
- 24a:	89 51       	subi	r24, 0x19	; 25
- 24c:	9c 4f       	sbci	r25, 0xFC	; 252
- 24e:	84 38       	cpi	r24, 0x84	; 132
- 250:	93 40       	sbci	r25, 0x03	; 3
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
- 252:	d0 f4       	brcc	.+52     	; 0x288 <writeLedDisplay+0x148>
- 254:	31 95       	neg	r19
-		digit3 = value / 100;
- 256:	21 95       	neg	r18
- 258:	31 09       	sbc	r19, r1
- 25a:	c9 01       	movw	r24, r18
- 25c:	64 e6       	ldi	r22, 0x64	; 100
- 25e:	70 e0       	ldi	r23, 0x00	; 0
+		} else if (value >= 1000 && value < 10000){
+ 1b0:	88 5e       	subi	r24, 0xE8	; 232
+ 1b2:	93 40       	sbci	r25, 0x03	; 3
+ 1b4:	88 32       	cpi	r24, 0x28	; 40
+ 1b6:	93 42       	sbci	r25, 0x23	; 35
+		digit4 = value / 1000;
+ 1b8:	30 f5       	brcc	.+76     	; 0x206 <writeLedDisplay+0xc6>
+ 1ba:	ce 01       	movw	r24, r28
+ 1bc:	68 ee       	ldi	r22, 0xE8	; 232
+ 1be:	73 e0       	ldi	r23, 0x03	; 3
+ 1c0:	9a d0       	rcall	.+308    	; 0x2f6 <__divmodhi4>
+ 1c2:	e6 2f       	mov	r30, r22
+		digit3 = (value / 100) % 10;
+ 1c4:	47 2f       	mov	r20, r23
+ 1c6:	ce 01       	movw	r24, r28
+ 1c8:	64 e6       	ldi	r22, 0x64	; 100
+ 1ca:	70 e0       	ldi	r23, 0x00	; 0
+ 1cc:	94 d0       	rcall	.+296    	; 0x2f6 <__divmodhi4>
+ 1ce:	cb 01       	movw	r24, r22
+ 1d0:	2a e0       	ldi	r18, 0x0A	; 10
+ 1d2:	30 e0       	ldi	r19, 0x00	; 0
+ 1d4:	b9 01       	movw	r22, r18
+ 1d6:	8f d0       	rcall	.+286    	; 0x2f6 <__divmodhi4>
 		digit2 = (value / 10) % 10;
- 260:	7b d0       	rcall	.+246    	; 0x358 <__divmodhi4>
- 262:	eb 01       	movw	r28, r22
- 264:	ea e0       	ldi	r30, 0x0A	; 10
- 266:	f0 e0       	ldi	r31, 0x00	; 0
- 268:	c9 01       	movw	r24, r18
- 26a:	bf 01       	movw	r22, r30
- 26c:	75 d0       	rcall	.+234    	; 0x358 <__divmodhi4>
- 26e:	38 2f       	mov	r19, r24
- 270:	29 2f       	mov	r18, r25
- 272:	cb 01       	movw	r24, r22
- 274:	bf 01       	movw	r22, r30
- 276:	70 d0       	rcall	.+224    	; 0x358 <__divmodhi4>
- 278:	8c 01       	movw	r16, r24
+ 1d8:	7c 01       	movw	r14, r24
+ 1da:	ce 01       	movw	r24, r28
+ 1dc:	b9 01       	movw	r22, r18
+ 1de:	8b d0       	rcall	.+278    	; 0x2f6 <__divmodhi4>
+ 1e0:	c8 2f       	mov	r28, r24
+ 1e2:	f9 2f       	mov	r31, r25
+ 1e4:	cb 01       	movw	r24, r22
+ 1e6:	b9 01       	movw	r22, r18
+ 1e8:	86 d0       	rcall	.+268    	; 0x2f6 <__divmodhi4>
+ 1ea:	8c 01       	movw	r16, r24
 		digit1 = value % 10;
- 27a:	63 2f       	mov	r22, r19
- 27c:	72 2f       	mov	r23, r18
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
-		value = (value * -1);
-		digit3 = value / 10;
+ 1ec:	6c 2f       	mov	r22, r28
+ 1ee:	7f 2f       	mov	r23, r31
+		} else if (value >= 100 && value < 1000){
+		digit4 = value / 100;
+		digit3 = (value / 10) % 10;
 		digit2 = value % 10;
-	} else if (value <= -100 && value > -1000){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
- 27e:	0f 2e       	mov	r0, r31
- 280:	ff e0       	ldi	r31, 0x0F	; 15
- 282:	ff 2e       	mov	r15, r31
- 284:	f0 2d       	mov	r31, r0
- 286:	08 c0       	rjmp	.+16     	; 0x298 <writeLedDisplay+0x158>
-void writeLedDisplay(int value){
-	
-	int digit1 = -1;
-	int digit2 = -1;
-	int digit3 = -1;
-	char digit4 = -1;
- 288:	ff 24       	eor	r15, r15
+		} else if (value >= 1000 && value < 10000){
+		digit4 = value / 1000;
+ 1f0:	ce 2f       	mov	r28, r30
+ 1f2:	d4 2f       	mov	r29, r20
+ 1f4:	11 c0       	rjmp	.+34     	; 0x218 <writeLedDisplay+0xd8>
 
 void writeLedDisplay(int value){
 	
 	int digit1 = -1;
 	int digit2 = -1;
 	int digit3 = -1;
- 28a:	fa 94       	dec	r15
- 28c:	cf ef       	ldi	r28, 0xFF	; 255
+ 1f6:	ee 24       	eor	r14, r14
+ 1f8:	ea 94       	dec	r14
+ 1fa:	fe 2c       	mov	r15, r14
 }
 
 void writeLedDisplay(int value){
 	
 	int digit1 = -1;
 	int digit2 = -1;
- 28e:	df ef       	ldi	r29, 0xFF	; 255
- 290:	0f ef       	ldi	r16, 0xFF	; 255
+ 1fc:	0f ef       	ldi	r16, 0xFF	; 255
+ 1fe:	1f ef       	ldi	r17, 0xFF	; 255
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
 	
 	int digit1 = -1;
- 292:	1f ef       	ldi	r17, 0xFF	; 255
- 294:	6f ef       	ldi	r22, 0xFF	; 255
-		digit3 = value / 100;
+ 200:	6f ef       	ldi	r22, 0xFF	; 255
+ 202:	7f ef       	ldi	r23, 0xFF	; 255
+ 204:	09 c0       	rjmp	.+18     	; 0x218 <writeLedDisplay+0xd8>
+	int digit2 = -1;
+	int digit3 = -1;
+	int digit4 = -1;
+ 206:	cf ef       	ldi	r28, 0xFF	; 255
+ 208:	df ef       	ldi	r29, 0xFF	; 255
+
+void writeLedDisplay(int value){
+	
+	int digit1 = -1;
+	int digit2 = -1;
+	int digit3 = -1;
+ 20a:	ee 24       	eor	r14, r14
+ 20c:	ea 94       	dec	r14
+ 20e:	fe 2c       	mov	r15, r14
+}
+
+void writeLedDisplay(int value){
+	
+	int digit1 = -1;
+	int digit2 = -1;
+ 210:	0f ef       	ldi	r16, 0xFF	; 255
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
+}
+
+void writeLedDisplay(int value){
+	
+	int digit1 = -1;
+ 212:	1f ef       	ldi	r17, 0xFF	; 255
+ 214:	6f ef       	ldi	r22, 0xFF	; 255
+		digit3 = (value / 100) % 10;
 		digit2 = (value / 10) % 10;
 		digit1 = value % 10;
 	}
 	
 	if (digit1 != -1){
- 296:	7f ef       	ldi	r23, 0xFF	; 255
- 298:	6f 3f       	cpi	r22, 0xFF	; 255
- 29a:	8f ef       	ldi	r24, 0xFF	; 255
+ 216:	7f ef       	ldi	r23, 0xFF	; 255
+ 218:	6f 3f       	cpi	r22, 0xFF	; 255
+ 21a:	4f ef       	ldi	r20, 0xFF	; 255
+ 21c:	74 07       	cpc	r23, r20
 		spi_writeWord(1, digit1);
- 29c:	78 07       	cpc	r23, r24
- 29e:	49 f0       	breq	.+18     	; 0x2b2 <writeLedDisplay+0x172>
- 2a0:	81 e0       	ldi	r24, 0x01	; 1
+ 21e:	49 f0       	breq	.+18     	; 0x232 <writeLedDisplay+0xf2>
+ 220:	81 e0       	ldi	r24, 0x01	; 1
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 2a2:	32 df       	rcall	.-412    	; 0x108 <spi_writeWord>
- 2a4:	8f e1       	ldi	r24, 0x1F	; 31
- 2a6:	9e e4       	ldi	r25, 0x4E	; 78
- 2a8:	01 97       	sbiw	r24, 0x01	; 1
- 2aa:	f1 f7       	brne	.-4      	; 0x2a8 <writeLedDisplay+0x168>
- 2ac:	00 c0       	rjmp	.+0      	; 0x2ae <writeLedDisplay+0x16e>
- 2ae:	00 00       	nop
+ 222:	72 df       	rcall	.-284    	; 0x108 <spi_writeWord>
+ 224:	8f e1       	ldi	r24, 0x1F	; 31
+ 226:	9e e4       	ldi	r25, 0x4E	; 78
+ 228:	01 97       	sbiw	r24, 0x01	; 1
+ 22a:	f1 f7       	brne	.-4      	; 0x228 <writeLedDisplay+0xe8>
+ 22c:	00 c0       	rjmp	.+0      	; 0x22e <writeLedDisplay+0xee>
+ 22e:	00 00       	nop
 		_delay_ms(10);
-	} else {
+		} else {
 		spi_writeWord(1, 0x0F);
- 2b0:	09 c0       	rjmp	.+18     	; 0x2c4 <writeLedDisplay+0x184>
- 2b2:	6f e0       	ldi	r22, 0x0F	; 15
- 2b4:	81 e0       	ldi	r24, 0x01	; 1
- 2b6:	28 df       	rcall	.-432    	; 0x108 <spi_writeWord>
- 2b8:	8f e1       	ldi	r24, 0x1F	; 31
- 2ba:	9e e4       	ldi	r25, 0x4E	; 78
- 2bc:	01 97       	sbiw	r24, 0x01	; 1
- 2be:	f1 f7       	brne	.-4      	; 0x2bc <writeLedDisplay+0x17c>
- 2c0:	00 c0       	rjmp	.+0      	; 0x2c2 <writeLedDisplay+0x182>
+ 230:	09 c0       	rjmp	.+18     	; 0x244 <writeLedDisplay+0x104>
+ 232:	6f e0       	ldi	r22, 0x0F	; 15
+ 234:	81 e0       	ldi	r24, 0x01	; 1
+ 236:	68 df       	rcall	.-304    	; 0x108 <spi_writeWord>
+ 238:	8f e1       	ldi	r24, 0x1F	; 31
+ 23a:	9e e4       	ldi	r25, 0x4E	; 78
+ 23c:	01 97       	sbiw	r24, 0x01	; 1
+ 23e:	f1 f7       	brne	.-4      	; 0x23c <writeLedDisplay+0xfc>
+ 240:	00 c0       	rjmp	.+0      	; 0x242 <writeLedDisplay+0x102>
 		_delay_ms(10);
 	}
 	if (digit2 != -1){
- 2c2:	00 00       	nop
- 2c4:	0f 3f       	cpi	r16, 0xFF	; 255
- 2c6:	9f ef       	ldi	r25, 0xFF	; 255
+ 242:	00 00       	nop
+ 244:	0f 3f       	cpi	r16, 0xFF	; 255
+ 246:	9f ef       	ldi	r25, 0xFF	; 255
+ 248:	19 07       	cpc	r17, r25
 		spi_writeWord(2, digit2);
- 2c8:	19 07       	cpc	r17, r25
- 2ca:	51 f0       	breq	.+20     	; 0x2e0 <writeLedDisplay+0x1a0>
- 2cc:	60 2f       	mov	r22, r16
- 2ce:	82 e0       	ldi	r24, 0x02	; 2
- 2d0:	1b df       	rcall	.-458    	; 0x108 <spi_writeWord>
- 2d2:	8f e1       	ldi	r24, 0x1F	; 31
- 2d4:	9e e4       	ldi	r25, 0x4E	; 78
- 2d6:	01 97       	sbiw	r24, 0x01	; 1
- 2d8:	f1 f7       	brne	.-4      	; 0x2d6 <writeLedDisplay+0x196>
- 2da:	00 c0       	rjmp	.+0      	; 0x2dc <writeLedDisplay+0x19c>
+ 24a:	51 f0       	breq	.+20     	; 0x260 <writeLedDisplay+0x120>
+ 24c:	60 2f       	mov	r22, r16
+ 24e:	82 e0       	ldi	r24, 0x02	; 2
+ 250:	5b df       	rcall	.-330    	; 0x108 <spi_writeWord>
+ 252:	8f e1       	ldi	r24, 0x1F	; 31
+ 254:	9e e4       	ldi	r25, 0x4E	; 78
+ 256:	01 97       	sbiw	r24, 0x01	; 1
+ 258:	f1 f7       	brne	.-4      	; 0x256 <writeLedDisplay+0x116>
+ 25a:	00 c0       	rjmp	.+0      	; 0x25c <writeLedDisplay+0x11c>
+ 25c:	00 00       	nop
 		_delay_ms(10);
-	} else {
+		} else {
 		spi_writeWord(2, 0x0F);
- 2dc:	00 00       	nop
- 2de:	09 c0       	rjmp	.+18     	; 0x2f2 <writeLedDisplay+0x1b2>
- 2e0:	6f e0       	ldi	r22, 0x0F	; 15
- 2e2:	82 e0       	ldi	r24, 0x02	; 2
- 2e4:	11 df       	rcall	.-478    	; 0x108 <spi_writeWord>
- 2e6:	8f e1       	ldi	r24, 0x1F	; 31
- 2e8:	9e e4       	ldi	r25, 0x4E	; 78
- 2ea:	01 97       	sbiw	r24, 0x01	; 1
- 2ec:	f1 f7       	brne	.-4      	; 0x2ea <writeLedDisplay+0x1aa>
+ 25e:	09 c0       	rjmp	.+18     	; 0x272 <writeLedDisplay+0x132>
+ 260:	6f e0       	ldi	r22, 0x0F	; 15
+ 262:	82 e0       	ldi	r24, 0x02	; 2
+ 264:	51 df       	rcall	.-350    	; 0x108 <spi_writeWord>
+ 266:	8f e1       	ldi	r24, 0x1F	; 31
+ 268:	9e e4       	ldi	r25, 0x4E	; 78
+ 26a:	01 97       	sbiw	r24, 0x01	; 1
+ 26c:	f1 f7       	brne	.-4      	; 0x26a <writeLedDisplay+0x12a>
+ 26e:	00 c0       	rjmp	.+0      	; 0x270 <writeLedDisplay+0x130>
 		_delay_ms(10);
 	}
 	if (digit3 != -1){
- 2ee:	00 c0       	rjmp	.+0      	; 0x2f0 <writeLedDisplay+0x1b0>
- 2f0:	00 00       	nop
- 2f2:	cf 3f       	cpi	r28, 0xFF	; 255
- 2f4:	9f ef       	ldi	r25, 0xFF	; 255
+ 270:	00 00       	nop
+ 272:	9f ef       	ldi	r25, 0xFF	; 255
+ 274:	e9 16       	cp	r14, r25
 		spi_writeWord(3, digit3);
- 2f6:	d9 07       	cpc	r29, r25
- 2f8:	51 f0       	breq	.+20     	; 0x30e <writeLedDisplay+0x1ce>
- 2fa:	6c 2f       	mov	r22, r28
- 2fc:	83 e0       	ldi	r24, 0x03	; 3
- 2fe:	04 df       	rcall	.-504    	; 0x108 <spi_writeWord>
- 300:	8f e1       	ldi	r24, 0x1F	; 31
- 302:	9e e4       	ldi	r25, 0x4E	; 78
- 304:	01 97       	sbiw	r24, 0x01	; 1
- 306:	f1 f7       	brne	.-4      	; 0x304 <writeLedDisplay+0x1c4>
- 308:	00 c0       	rjmp	.+0      	; 0x30a <writeLedDisplay+0x1ca>
+ 276:	f9 06       	cpc	r15, r25
+ 278:	51 f0       	breq	.+20     	; 0x28e <writeLedDisplay+0x14e>
+ 27a:	6e 2d       	mov	r22, r14
+ 27c:	83 e0       	ldi	r24, 0x03	; 3
+ 27e:	44 df       	rcall	.-376    	; 0x108 <spi_writeWord>
+ 280:	8f e1       	ldi	r24, 0x1F	; 31
+ 282:	9e e4       	ldi	r25, 0x4E	; 78
+ 284:	01 97       	sbiw	r24, 0x01	; 1
+ 286:	f1 f7       	brne	.-4      	; 0x284 <writeLedDisplay+0x144>
+ 288:	00 c0       	rjmp	.+0      	; 0x28a <writeLedDisplay+0x14a>
+ 28a:	00 00       	nop
 		_delay_ms(10);
-	} else {
+		} else {
 		spi_writeWord(3, 0x0F);
- 30a:	00 00       	nop
- 30c:	09 c0       	rjmp	.+18     	; 0x320 <writeLedDisplay+0x1e0>
- 30e:	6f e0       	ldi	r22, 0x0F	; 15
- 310:	83 e0       	ldi	r24, 0x03	; 3
- 312:	fa de       	rcall	.-524    	; 0x108 <spi_writeWord>
- 314:	8f e1       	ldi	r24, 0x1F	; 31
- 316:	9e e4       	ldi	r25, 0x4E	; 78
- 318:	01 97       	sbiw	r24, 0x01	; 1
- 31a:	f1 f7       	brne	.-4      	; 0x318 <writeLedDisplay+0x1d8>
- 31c:	00 c0       	rjmp	.+0      	; 0x31e <writeLedDisplay+0x1de>
+ 28c:	09 c0       	rjmp	.+18     	; 0x2a0 <writeLedDisplay+0x160>
+ 28e:	6f e0       	ldi	r22, 0x0F	; 15
+ 290:	83 e0       	ldi	r24, 0x03	; 3
+ 292:	3a df       	rcall	.-396    	; 0x108 <spi_writeWord>
+ 294:	8f e1       	ldi	r24, 0x1F	; 31
+ 296:	9e e4       	ldi	r25, 0x4E	; 78
+ 298:	01 97       	sbiw	r24, 0x01	; 1
+ 29a:	f1 f7       	brne	.-4      	; 0x298 <writeLedDisplay+0x158>
+ 29c:	00 c0       	rjmp	.+0      	; 0x29e <writeLedDisplay+0x15e>
 		_delay_ms(10);
 	}
 	if (digit4 != -1){
+ 29e:	00 00       	nop
+ 2a0:	cf 3f       	cpi	r28, 0xFF	; 255
+ 2a2:	9f ef       	ldi	r25, 0xFF	; 255
 		spi_writeWord(4, digit4);
- 31e:	00 00       	nop
- 320:	6f 2d       	mov	r22, r15
- 322:	84 e0       	ldi	r24, 0x04	; 4
- 324:	f1 de       	rcall	.-542    	; 0x108 <spi_writeWord>
- 326:	8f e1       	ldi	r24, 0x1F	; 31
- 328:	9e e4       	ldi	r25, 0x4E	; 78
- 32a:	01 97       	sbiw	r24, 0x01	; 1
- 32c:	f1 f7       	brne	.-4      	; 0x32a <writeLedDisplay+0x1ea>
- 32e:	00 c0       	rjmp	.+0      	; 0x330 <writeLedDisplay+0x1f0>
- 330:	00 00       	nop
+ 2a4:	d9 07       	cpc	r29, r25
+ 2a6:	51 f0       	breq	.+20     	; 0x2bc <writeLedDisplay+0x17c>
+ 2a8:	6c 2f       	mov	r22, r28
+ 2aa:	84 e0       	ldi	r24, 0x04	; 4
+ 2ac:	2d df       	rcall	.-422    	; 0x108 <spi_writeWord>
+ 2ae:	8f e1       	ldi	r24, 0x1F	; 31
+ 2b0:	9e e4       	ldi	r25, 0x4E	; 78
+ 2b2:	01 97       	sbiw	r24, 0x01	; 1
+ 2b4:	f1 f7       	brne	.-4      	; 0x2b2 <writeLedDisplay+0x172>
+ 2b6:	00 c0       	rjmp	.+0      	; 0x2b8 <writeLedDisplay+0x178>
+ 2b8:	00 00       	nop
 		_delay_ms(10);
-	} else {
+		} else {
 		spi_writeWord(4, 0x0F);
+ 2ba:	09 c0       	rjmp	.+18     	; 0x2ce <writeLedDisplay+0x18e>
+ 2bc:	6f e0       	ldi	r22, 0x0F	; 15
+ 2be:	84 e0       	ldi	r24, 0x04	; 4
+ 2c0:	23 df       	rcall	.-442    	; 0x108 <spi_writeWord>
+ 2c2:	8f e1       	ldi	r24, 0x1F	; 31
+ 2c4:	9e e4       	ldi	r25, 0x4E	; 78
+ 2c6:	01 97       	sbiw	r24, 0x01	; 1
+ 2c8:	f1 f7       	brne	.-4      	; 0x2c6 <writeLedDisplay+0x186>
+ 2ca:	00 c0       	rjmp	.+0      	; 0x2cc <writeLedDisplay+0x18c>
+ 2cc:	00 00       	nop
 		_delay_ms(10);
 	}
 }
- 332:	df 91       	pop	r29
- 334:	cf 91       	pop	r28
- 336:	1f 91       	pop	r17
- 338:	0f 91       	pop	r16
- 33a:	ff 90       	pop	r15
- 33c:	08 95       	ret
+ 2ce:	df 91       	pop	r29
+ 2d0:	cf 91       	pop	r28
+ 2d2:	1f 91       	pop	r17
+ 2d4:	0f 91       	pop	r16
+ 2d6:	ff 90       	pop	r15
+ 2d8:	ef 90       	pop	r14
+ 2da:	08 95       	ret
 
-0000033e <main>:
+000002dc <main>:
+
 
 int main()
 {
 	// inilialize
 	DDRB=0x01;					  	// Set PB0 pin as output for display select
- 33e:	81 e0       	ldi	r24, 0x01	; 1
- 340:	87 bb       	out	0x17, r24	; 23
+ 2dc:	81 e0       	ldi	r24, 0x01	; 1
+ 2de:	87 bb       	out	0x17, r24	; 23
 	spi_masterInit();              	// Initialize spi module
- 342:	bc de       	rcall	.-648    	; 0xbc <spi_masterInit>
+ 2e0:	ed de       	rcall	.-550    	; 0xbc <spi_masterInit>
 	displayDriverInit();            // Initialize display chip
- 344:	f0 de       	rcall	.-544    	; 0x126 <displayDriverInit>
- 346:	88 ec       	ldi	r24, 0xC8	; 200
+ 2e2:	21 df       	rcall	.-446    	; 0x126 <displayDriverInit>
+ 2e4:	8d e0       	ldi	r24, 0x0D	; 13
 
-	writeLedDisplay(-56);
- 348:	9f ef       	ldi	r25, 0xFF	; 255
- 34a:	fa de       	rcall	.-524    	; 0x140 <writeLedDisplay>
- 34c:	88 ee       	ldi	r24, 0xE8	; 232
-	 
+	
+	writeLedDisplay(13);
+ 2e6:	90 e0       	ldi	r25, 0x00	; 0
+ 2e8:	2b df       	rcall	.-426    	; 0x140 <writeLedDisplay>
+ 2ea:	88 ee       	ldi	r24, 0xE8	; 232
 	wait(1000);
- 34e:	93 e0       	ldi	r25, 0x03	; 3
- 350:	a6 de       	rcall	.-692    	; 0x9e <wait>
- 352:	81 e0       	ldi	r24, 0x01	; 1
- 354:	90 e0       	ldi	r25, 0x00	; 0
-  	return (1);
+ 2ec:	93 e0       	ldi	r25, 0x03	; 3
+ 2ee:	d7 de       	rcall	.-594    	; 0x9e <wait>
+ 2f0:	81 e0       	ldi	r24, 0x01	; 1
+ 2f2:	90 e0       	ldi	r25, 0x00	; 0
+	return (1);
 }
- 356:	08 95       	ret
+ 2f4:	08 95       	ret
 
-00000358 <__divmodhi4>:
- 358:	97 fb       	bst	r25, 7
- 35a:	07 2e       	mov	r0, r23
- 35c:	16 f4       	brtc	.+4      	; 0x362 <__divmodhi4+0xa>
- 35e:	00 94       	com	r0
- 360:	06 d0       	rcall	.+12     	; 0x36e <__divmodhi4_neg1>
- 362:	77 fd       	sbrc	r23, 7
- 364:	08 d0       	rcall	.+16     	; 0x376 <__divmodhi4_neg2>
- 366:	0b d0       	rcall	.+22     	; 0x37e <__udivmodhi4>
- 368:	07 fc       	sbrc	r0, 7
- 36a:	05 d0       	rcall	.+10     	; 0x376 <__divmodhi4_neg2>
- 36c:	3e f4       	brtc	.+14     	; 0x37c <__divmodhi4_exit>
+000002f6 <__divmodhi4>:
+ 2f6:	97 fb       	bst	r25, 7
+ 2f8:	07 2e       	mov	r0, r23
+ 2fa:	16 f4       	brtc	.+4      	; 0x300 <__divmodhi4+0xa>
+ 2fc:	00 94       	com	r0
+ 2fe:	06 d0       	rcall	.+12     	; 0x30c <__divmodhi4_neg1>
+ 300:	77 fd       	sbrc	r23, 7
+ 302:	08 d0       	rcall	.+16     	; 0x314 <__divmodhi4_neg2>
+ 304:	0b d0       	rcall	.+22     	; 0x31c <__udivmodhi4>
+ 306:	07 fc       	sbrc	r0, 7
+ 308:	05 d0       	rcall	.+10     	; 0x314 <__divmodhi4_neg2>
+ 30a:	3e f4       	brtc	.+14     	; 0x31a <__divmodhi4_exit>
 
-0000036e <__divmodhi4_neg1>:
- 36e:	90 95       	com	r25
- 370:	81 95       	neg	r24
- 372:	9f 4f       	sbci	r25, 0xFF	; 255
- 374:	08 95       	ret
+0000030c <__divmodhi4_neg1>:
+ 30c:	90 95       	com	r25
+ 30e:	81 95       	neg	r24
+ 310:	9f 4f       	sbci	r25, 0xFF	; 255
+ 312:	08 95       	ret
 
-00000376 <__divmodhi4_neg2>:
- 376:	70 95       	com	r23
- 378:	61 95       	neg	r22
- 37a:	7f 4f       	sbci	r23, 0xFF	; 255
+00000314 <__divmodhi4_neg2>:
+ 314:	70 95       	com	r23
+ 316:	61 95       	neg	r22
+ 318:	7f 4f       	sbci	r23, 0xFF	; 255
 
-0000037c <__divmodhi4_exit>:
- 37c:	08 95       	ret
+0000031a <__divmodhi4_exit>:
+ 31a:	08 95       	ret
 
-0000037e <__udivmodhi4>:
- 37e:	aa 1b       	sub	r26, r26
- 380:	bb 1b       	sub	r27, r27
- 382:	51 e1       	ldi	r21, 0x11	; 17
- 384:	07 c0       	rjmp	.+14     	; 0x394 <__udivmodhi4_ep>
+0000031c <__udivmodhi4>:
+ 31c:	aa 1b       	sub	r26, r26
+ 31e:	bb 1b       	sub	r27, r27
+ 320:	51 e1       	ldi	r21, 0x11	; 17
+ 322:	07 c0       	rjmp	.+14     	; 0x332 <__udivmodhi4_ep>
 
-00000386 <__udivmodhi4_loop>:
- 386:	aa 1f       	adc	r26, r26
- 388:	bb 1f       	adc	r27, r27
- 38a:	a6 17       	cp	r26, r22
- 38c:	b7 07       	cpc	r27, r23
- 38e:	10 f0       	brcs	.+4      	; 0x394 <__udivmodhi4_ep>
- 390:	a6 1b       	sub	r26, r22
- 392:	b7 0b       	sbc	r27, r23
+00000324 <__udivmodhi4_loop>:
+ 324:	aa 1f       	adc	r26, r26
+ 326:	bb 1f       	adc	r27, r27
+ 328:	a6 17       	cp	r26, r22
+ 32a:	b7 07       	cpc	r27, r23
+ 32c:	10 f0       	brcs	.+4      	; 0x332 <__udivmodhi4_ep>
+ 32e:	a6 1b       	sub	r26, r22
+ 330:	b7 0b       	sbc	r27, r23
 
-00000394 <__udivmodhi4_ep>:
- 394:	88 1f       	adc	r24, r24
- 396:	99 1f       	adc	r25, r25
- 398:	5a 95       	dec	r21
- 39a:	a9 f7       	brne	.-22     	; 0x386 <__udivmodhi4_loop>
- 39c:	80 95       	com	r24
- 39e:	90 95       	com	r25
- 3a0:	bc 01       	movw	r22, r24
- 3a2:	cd 01       	movw	r24, r26
- 3a4:	08 95       	ret
+00000332 <__udivmodhi4_ep>:
+ 332:	88 1f       	adc	r24, r24
+ 334:	99 1f       	adc	r25, r25
+ 336:	5a 95       	dec	r21
+ 338:	a9 f7       	brne	.-22     	; 0x324 <__udivmodhi4_loop>
+ 33a:	80 95       	com	r24
+ 33c:	90 95       	com	r25
+ 33e:	bc 01       	movw	r22, r24
+ 340:	cd 01       	movw	r24, r26
+ 342:	08 95       	ret
 
-000003a6 <_exit>:
- 3a6:	f8 94       	cli
+00000344 <_exit>:
+ 344:	f8 94       	cli
 
-000003a8 <__stop_program>:
- 3a8:	ff cf       	rjmp	.-2      	; 0x3a8 <__stop_program>
+00000346 <__stop_program>:
+ 346:	ff cf       	rjmp	.-2      	; 0x346 <__stop_program>

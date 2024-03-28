@@ -92,6 +92,78 @@ void displayOff()
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
+void writeLedDisplay(int value){
+	
+	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
+	int digit1 = -1;
+	int digit2 = -1;
+	int digit3 = -1;
+	char digit4 = -1;
+	
+	
+	// aan de hand van de value worden de cijfers gesplitst in de digits, bij negatieve value worden de cijfers een digit opgeschoven en komt er een min-teken voor
+	if (value < 10 && value >= 0){
+		digit4 = value;
+		} else if (value >= 10 && value < 100){
+		digit4 = value / 10;
+		digit3 = value % 10;
+		} else if (value >= 100 && value < 1000){
+		digit4 = value / 100;
+		digit3 = (value / 10) % 10;
+		digit2 = value % 10;
+		} else if (value >= 1000 && value < 10000){
+		digit4 = value / 1000;
+		digit3 = (value / 100) % 10;
+		digit2 = (value / 10) % 10;
+		digit1 = value % 10;
+		}  else if (value < 0 && value > -10){
+		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		value = (value * -1);
+		digit3 = value;
+		} else if (value <= -10 && value > -100){
+		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		value = (value * -1);
+		digit3 = value / 10;
+		digit2 = value % 10;
+		} else if (value <= -100 && value > -1000){
+		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		value = (value * -1);
+		digit3 = value / 100;
+		digit2 = (value / 10) % 10;
+		digit1 = value % 10;
+	}
+	
+	// check of de digits zijn veranderd en print ze dan
+	if (digit1 != -1){
+		spi_writeWord(1, digit1);
+		_delay_ms(10);
+		} else {
+		spi_writeWord(1, 0x0F);
+		_delay_ms(10);
+	}
+	if (digit2 != -1){
+		spi_writeWord(2, digit2);
+		_delay_ms(10);
+		} else {
+		spi_writeWord(2, 0x0F);
+		_delay_ms(10);
+	}
+	if (digit3 != -1){
+		spi_writeWord(3, digit3);
+		_delay_ms(10);
+		} else {
+		spi_writeWord(3, 0x0F);
+		_delay_ms(10);
+	}
+	if (digit4 != -1){
+		spi_writeWord(4, digit4);
+		_delay_ms(10);
+		} else {
+		spi_writeWord(4, 0x0F);
+		_delay_ms(10);
+	}
+}
+
 int main()
 {
 	// inilialize
@@ -99,19 +171,10 @@ int main()
 	spi_masterInit();              	// Initialize spi module
 	displayDriverInit();            // Initialize display chip
 
-	// clear display (all zero's)
-	for (char i =1; i<=5; i++)
-	{
-		spi_writeWord(i, 0);		// i = adres, 0 = waarde
-	}
-	wait(1000);
-
-	// write 4-digit data
-	for (char i =1; i<=5; i++)
-	{
-		spi_writeWord(i, i); // i = adres, i = waarde
-		wait(1000);
-	}
+	writeLedDisplay(-56);
+	
 	wait(1000);
 	return (1);
 }
+
+
