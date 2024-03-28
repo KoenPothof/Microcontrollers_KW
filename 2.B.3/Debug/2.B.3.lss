@@ -21,11 +21,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   8 .debug_frame  00000034  00000000  00000000  0000173c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_str    0000044a  00000000  00000000  00001770  2**0
+  9 .debug_str    00000423  00000000  00000000  00001770  2**0
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_loc    00000156  00000000  00000000  00001bba  2**0
+ 10 .debug_loc    00000156  00000000  00000000  00001b93  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_ranges 00000018  00000000  00000000  00001d10  2**0
+ 11 .debug_ranges 00000018  00000000  00000000  00001ce9  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -131,12 +131,12 @@ Disassembly of section .text:
   b6:	a4 cf       	rjmp	.-184    	; 0x0 <__vectors>
 
 000000b8 <display>:
-	0b01110001, // F
 	0b01111001, // E
 };
 
-void display(int digit){
-	PORTD = Numbers[digit];
+// Functie om een bepaald cijfer/teken weer te geven op een 7-segment display
+void display(int digit) {
+	PORTD = Numbers[digit]; // Toon het cijfer/teken op het 7-segment display
   b8:	80 50       	subi	r24, 0x00	; 0
   ba:	9f 4f       	sbci	r25, 0xFF	; 255
   bc:	fc 01       	movw	r30, r24
@@ -147,21 +147,23 @@ void display(int digit){
 000000c4 <main>:
 }
 
-int main( void ) {
-	DDRD = 0b11111111;
+int main(void) {
+	DDRD = 0b11111111; // Stel alle pinnen van Port D in als uitgangen (voor het 7-segment display)
   c4:	8f ef       	ldi	r24, 0xFF	; 255
   c6:	81 bb       	out	0x11, r24	; 17
-	PORTC = 0x01;
+	PORTC = 0x01; // Zet de interne pull-up weerstanden voor pin PC0 aan
   c8:	81 e0       	ldi	r24, 0x01	; 1
   ca:	85 bb       	out	0x15, r24	; 21
-	PORTB = 0x01;
+	PORTB = 0x01; // Zet de interne pull-up weerstanden voor pin PB0 aan
   cc:	88 bb       	out	0x18, r24	; 24
-	
+
 	int i = 0;
   ce:	c0 e0       	ldi	r28, 0x00	; 0
   d0:	d0 e0       	ldi	r29, 0x00	; 0
+
 	while (1) {
-		if(PINC == 1){
+		// Incrementeer de waarde als de knop op pin PC0 (PINC == 1) wordt ingedrukt
+		if (PINC == 1) {
   d2:	83 b3       	in	r24, 0x13	; 19
   d4:	81 30       	cpi	r24, 0x01	; 1
   d6:	51 f4       	brne	.+20     	; 0xec <main+0x28>
@@ -182,13 +184,15 @@ int main( void ) {
   e6:	e1 f7       	brne	.-8      	; 0xe0 <main+0x1c>
   e8:	00 c0       	rjmp	.+0      	; 0xea <main+0x26>
   ea:	00 00       	nop
-			_delay_ms(400);
+			_delay_ms(400); // Wacht 400 milliseconden om debounce te voorkomen
 		}
-		if(PINB == 1){
+		
+		// Decrementeer de waarde als de knop op pin PB0 (PINB == 1) wordt ingedrukt
+		if (PINB == 1) {
   ec:	86 b3       	in	r24, 0x16	; 22
   ee:	81 30       	cpi	r24, 0x01	; 1
   f0:	69 f4       	brne	.+26     	; 0x10c <main+0x48>
-			if(i>0){
+			if (i > 0) {
   f2:	1c 16       	cp	r1, r28
   f4:	1d 06       	cpc	r1, r29
   f6:	54 f4       	brge	.+20     	; 0x10c <main+0x48>
@@ -203,10 +207,12 @@ int main( void ) {
  106:	e1 f7       	brne	.-8      	; 0x100 <main+0x3c>
  108:	00 c0       	rjmp	.+0      	; 0x10a <main+0x46>
  10a:	00 00       	nop
-				_delay_ms(400);
+				_delay_ms(400); // Wacht 400 milliseconden om debounce te voorkomen
 			}
 		}
-		if(i>15){
+
+		
+		if (i > 15) {
  10c:	c0 31       	cpi	r28, 0x10	; 16
  10e:	d1 05       	cpc	r29, r1
  110:	14 f0       	brlt	.+4      	; 0x116 <main+0x52>
@@ -214,7 +220,9 @@ int main( void ) {
  112:	c0 e1       	ldi	r28, 0x10	; 16
  114:	d0 e0       	ldi	r29, 0x00	; 0
 		}
-		if(PINB == 1 && PINC == 1){
+
+		// Reset de waarde naar 0 als beide knoppen tegelijkertijd worden ingedrukt
+		if (PINB == 1 && PINC == 1) {
  116:	86 b3       	in	r24, 0x16	; 22
  118:	81 30       	cpi	r24, 0x01	; 1
  11a:	71 f4       	brne	.+28     	; 0x138 <main+0x74>
@@ -233,9 +241,10 @@ int main( void ) {
 			i = 0;
  134:	c0 e0       	ldi	r28, 0x00	; 0
  136:	d0 e0       	ldi	r29, 0x00	; 0
-			_delay_ms(400);
+			_delay_ms(400); // Wacht 400 milliseconden om debounce te voorkomen
 		}
-		display(i);
+
+		display(i); // Geef de huidige waarde weer op het 7-segment display
  138:	ce 01       	movw	r24, r28
  13a:	be df       	rcall	.-132    	; 0xb8 <display>
 	}

@@ -1,0 +1,216 @@
+
+2.B.2.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .data         00000000  00800100  00800100  00000166  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  1 .text         00000112  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  2 .comment      00000030  00000000  00000000  00000166  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000198  2**2
+                  CONTENTS, READONLY
+  4 .debug_aranges 00000038  00000000  00000000  000001d4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_info   00000853  00000000  00000000  0000020c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_abbrev 000007a7  00000000  00000000  00000a5f  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_line   00000289  00000000  00000000  00001206  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_frame  00000074  00000000  00000000  00001490  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_str    000003d9  00000000  00000000  00001504  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_loc    00000078  00000000  00000000  000018dd  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_ranges 00000028  00000000  00000000  00001955  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	45 c0       	rjmp	.+138    	; 0x8c <__ctors_end>
+   2:	00 00       	nop
+   4:	4c c0       	rjmp	.+152    	; 0x9e <__vector_1>
+   6:	00 00       	nop
+   8:	5e c0       	rjmp	.+188    	; 0xc6 <__vector_2>
+   a:	00 00       	nop
+   c:	47 c0       	rjmp	.+142    	; 0x9c <__bad_interrupt>
+   e:	00 00       	nop
+  10:	45 c0       	rjmp	.+138    	; 0x9c <__bad_interrupt>
+  12:	00 00       	nop
+  14:	43 c0       	rjmp	.+134    	; 0x9c <__bad_interrupt>
+  16:	00 00       	nop
+  18:	41 c0       	rjmp	.+130    	; 0x9c <__bad_interrupt>
+  1a:	00 00       	nop
+  1c:	3f c0       	rjmp	.+126    	; 0x9c <__bad_interrupt>
+  1e:	00 00       	nop
+  20:	3d c0       	rjmp	.+122    	; 0x9c <__bad_interrupt>
+  22:	00 00       	nop
+  24:	3b c0       	rjmp	.+118    	; 0x9c <__bad_interrupt>
+  26:	00 00       	nop
+  28:	39 c0       	rjmp	.+114    	; 0x9c <__bad_interrupt>
+  2a:	00 00       	nop
+  2c:	37 c0       	rjmp	.+110    	; 0x9c <__bad_interrupt>
+  2e:	00 00       	nop
+  30:	35 c0       	rjmp	.+106    	; 0x9c <__bad_interrupt>
+  32:	00 00       	nop
+  34:	33 c0       	rjmp	.+102    	; 0x9c <__bad_interrupt>
+  36:	00 00       	nop
+  38:	31 c0       	rjmp	.+98     	; 0x9c <__bad_interrupt>
+  3a:	00 00       	nop
+  3c:	2f c0       	rjmp	.+94     	; 0x9c <__bad_interrupt>
+  3e:	00 00       	nop
+  40:	2d c0       	rjmp	.+90     	; 0x9c <__bad_interrupt>
+  42:	00 00       	nop
+  44:	2b c0       	rjmp	.+86     	; 0x9c <__bad_interrupt>
+  46:	00 00       	nop
+  48:	29 c0       	rjmp	.+82     	; 0x9c <__bad_interrupt>
+  4a:	00 00       	nop
+  4c:	27 c0       	rjmp	.+78     	; 0x9c <__bad_interrupt>
+  4e:	00 00       	nop
+  50:	25 c0       	rjmp	.+74     	; 0x9c <__bad_interrupt>
+  52:	00 00       	nop
+  54:	23 c0       	rjmp	.+70     	; 0x9c <__bad_interrupt>
+  56:	00 00       	nop
+  58:	21 c0       	rjmp	.+66     	; 0x9c <__bad_interrupt>
+  5a:	00 00       	nop
+  5c:	1f c0       	rjmp	.+62     	; 0x9c <__bad_interrupt>
+  5e:	00 00       	nop
+  60:	1d c0       	rjmp	.+58     	; 0x9c <__bad_interrupt>
+  62:	00 00       	nop
+  64:	1b c0       	rjmp	.+54     	; 0x9c <__bad_interrupt>
+  66:	00 00       	nop
+  68:	19 c0       	rjmp	.+50     	; 0x9c <__bad_interrupt>
+  6a:	00 00       	nop
+  6c:	17 c0       	rjmp	.+46     	; 0x9c <__bad_interrupt>
+  6e:	00 00       	nop
+  70:	15 c0       	rjmp	.+42     	; 0x9c <__bad_interrupt>
+  72:	00 00       	nop
+  74:	13 c0       	rjmp	.+38     	; 0x9c <__bad_interrupt>
+  76:	00 00       	nop
+  78:	11 c0       	rjmp	.+34     	; 0x9c <__bad_interrupt>
+  7a:	00 00       	nop
+  7c:	0f c0       	rjmp	.+30     	; 0x9c <__bad_interrupt>
+  7e:	00 00       	nop
+  80:	0d c0       	rjmp	.+26     	; 0x9c <__bad_interrupt>
+  82:	00 00       	nop
+  84:	0b c0       	rjmp	.+22     	; 0x9c <__bad_interrupt>
+  86:	00 00       	nop
+  88:	09 c0       	rjmp	.+18     	; 0x9c <__bad_interrupt>
+	...
+
+0000008c <__ctors_end>:
+  8c:	11 24       	eor	r1, r1
+  8e:	1f be       	out	0x3f, r1	; 63
+  90:	cf ef       	ldi	r28, 0xFF	; 255
+  92:	d0 e1       	ldi	r29, 0x10	; 16
+  94:	de bf       	out	0x3e, r29	; 62
+  96:	cd bf       	out	0x3d, r28	; 61
+  98:	38 d0       	rcall	.+112    	; 0x10a <main>
+  9a:	39 c0       	rjmp	.+114    	; 0x10e <_exit>
+
+0000009c <__bad_interrupt>:
+  9c:	b1 cf       	rjmp	.-158    	; 0x0 <__vectors>
+
+0000009e <__vector_1>:
+#include <util/delay.h>
+#include <avr/interrupt.h>
+
+
+// Interrupt service routine voor externe interrupt 0 (INT0)
+ISR(INT0_vect) {
+  9e:	1f 92       	push	r1
+  a0:	0f 92       	push	r0
+  a2:	0f b6       	in	r0, 0x3f	; 63
+  a4:	0f 92       	push	r0
+  a6:	11 24       	eor	r1, r1
+  a8:	8f 93       	push	r24
+	PORTA <<= 1; // Verschuif de waarde van PORTA één bit naar links
+  aa:	8b b3       	in	r24, 0x1b	; 27
+  ac:	88 0f       	add	r24, r24
+  ae:	8b bb       	out	0x1b, r24	; 27
+	if (!PORTA) // Controleer of PORTA nul is geworden na het verschuiven
+  b0:	8b b3       	in	r24, 0x1b	; 27
+  b2:	81 11       	cpse	r24, r1
+  b4:	02 c0       	rjmp	.+4      	; 0xba <__vector_1+0x1c>
+	PORTA = 1; // Als PORTA nul is, stel het in op 1
+  b6:	81 e0       	ldi	r24, 0x01	; 1
+  b8:	8b bb       	out	0x1b, r24	; 27
+}
+  ba:	8f 91       	pop	r24
+  bc:	0f 90       	pop	r0
+  be:	0f be       	out	0x3f, r0	; 63
+  c0:	0f 90       	pop	r0
+  c2:	1f 90       	pop	r1
+  c4:	18 95       	reti
+
+000000c6 <__vector_2>:
+
+// Interrupt service routine voor externe interrupt 1 (INT1)
+ISR(INT1_vect) {
+  c6:	1f 92       	push	r1
+  c8:	0f 92       	push	r0
+  ca:	0f b6       	in	r0, 0x3f	; 63
+  cc:	0f 92       	push	r0
+  ce:	11 24       	eor	r1, r1
+  d0:	8f 93       	push	r24
+	PORTA >>= 1; // Verschuif de waarde van PORTA één bit naar rechts
+  d2:	8b b3       	in	r24, 0x1b	; 27
+  d4:	86 95       	lsr	r24
+  d6:	8b bb       	out	0x1b, r24	; 27
+	if (!PORTA) // Controleer of PORTA nul is geworden na het verschuiven
+  d8:	8b b3       	in	r24, 0x1b	; 27
+  da:	81 11       	cpse	r24, r1
+  dc:	02 c0       	rjmp	.+4      	; 0xe2 <__vector_2+0x1c>
+	PORTA = 1 << 7; // Als PORTA nul is, stel het in op 0b10000000 (MSB)
+  de:	80 e8       	ldi	r24, 0x80	; 128
+  e0:	8b bb       	out	0x1b, r24	; 27
+}
+  e2:	8f 91       	pop	r24
+  e4:	0f 90       	pop	r0
+  e6:	0f be       	out	0x3f, r0	; 63
+  e8:	0f 90       	pop	r0
+  ea:	1f 90       	pop	r1
+  ec:	18 95       	reti
+
+000000ee <initSetup>:
+
+void initSetup() {
+	DDRA = 0xFF; // Stel alle pinnen van Port A in als uitgangen
+  ee:	8f ef       	ldi	r24, 0xFF	; 255
+  f0:	8a bb       	out	0x1a, r24	; 26
+
+	EICRA |= 0x0F; // Configureer de External Interrupt Control Register A voor oplopende flank voor INT0 en INT1
+  f2:	ea e6       	ldi	r30, 0x6A	; 106
+  f4:	f0 e0       	ldi	r31, 0x00	; 0
+  f6:	80 81       	ld	r24, Z
+  f8:	8f 60       	ori	r24, 0x0F	; 15
+  fa:	80 83       	st	Z, r24
+	EIMSK |= 0x03; // Stel bits 0 en 1 van External Interrupt Mask Register in om INT0 en INT1 in te schakelen
+  fc:	89 b7       	in	r24, 0x39	; 57
+  fe:	83 60       	ori	r24, 0x03	; 3
+ 100:	89 bf       	out	0x39, r24	; 57
+	sei(); // Schakel de globale interrupt vlag in
+ 102:	78 94       	sei
+
+	PORTA = 1; // Zet de eerste pin van Port A hoog, de rest laag
+ 104:	81 e0       	ldi	r24, 0x01	; 1
+ 106:	8b bb       	out	0x1b, r24	; 27
+ 108:	08 95       	ret
+
+0000010a <main>:
+}
+
+int main(void) {
+	initSetup(); // Voer initiële setup uit
+ 10a:	f1 df       	rcall	.-30     	; 0xee <initSetup>
+ 10c:	ff cf       	rjmp	.-2      	; 0x10c <main+0x2>
+
+0000010e <_exit>:
+ 10e:	f8 94       	cli
+
+00000110 <__stop_program>:
+ 110:	ff cf       	rjmp	.-2      	; 0x110 <__stop_program>

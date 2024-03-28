@@ -16,19 +16,20 @@
 
 int main(void)
 {
-    DDRA = 0xFF;
-	PORTA = 0b00000001;
-    
-   while (1)
-   {
-	   if(PORTA != 0b00000000){
-	   PORTA = (PORTA<< 1);
-	   _delay_ms(500);
-	   }else{
-		PORTA = 0b00000001;
-		_delay_ms(500);
-	   }
+	DDRA = 0xFF; // Stel alle pinnen van Port A in als uitgangen
+	PORTA = 0b00000001; // Stel de eerste pin van Port A hoog, de rest laag
+	
+	while (1)
+	{
+		if(PORTA != 0b00000000){ // Controleer of PORTA niet gelijk is aan 0
+			PORTA = (PORTA << 1); // Verschuif de waarde van PORTA naar links (rol linksom) en schrijf het terug naar PORTA
+			_delay_ms(500); // Vertraging van 500 milliseconden
+		}
+		else{
+			PORTA = 0b00000001; // Als PORTA gelijk is aan 0, zet de eerste pin van Port A hoog en de rest laag
+			_delay_ms(500); // Vertraging van 500 milliseconden
+		}
 	}
-    return 0;
+	return 0;
 }
 
