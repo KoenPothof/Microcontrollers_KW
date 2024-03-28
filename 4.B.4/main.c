@@ -18,35 +18,35 @@
 // Initialize ADC:
 void adcInit( void )
 {
-	ADMUX = 0b11100011;			// AREF=VCC, result left adjusted, channel1 at pin PF1
-	ADCSRA = 0b11100110;		// ADC-enable, no interrupt, start, free running, division by 64
+	ADMUX = 0b01100001;			// Stel ADC-referentie in op AVCC, resultaat links uitgelijnd, kanaal 1 op pin PF1
+	ADCSRA = 0b11100110;		// Schakel ADC in, geen onderbreking, start, vrije loop-modus, deling door 64
 }
 
+// Functie voor bezig wachten
 void wait( int ms )
 {
 	for (int tms=0; tms<ms; tms++)
 	{
-		_delay_ms( 1 );			// library function (max 30 ms at 8MHz)
+		_delay_ms( 1 );			// Vertraging van 1 milliseconde met bibliotheekfunctie (maximaal 30 ms bij 8MHz)
 	}
 }
 
-
 int main( void ) {
-	DDRF = 0x00;				// set PORTF for input (ADC)
-	DDRA = 0xFF;				// set PORTA for output
-	adcInit();					// initialize ADC
-	lcd_init();					// Init lcd
+	DDRF = 0x00;				// Zet PORTF als invoer (ADC)
+	DDRA = 0xFF;				// Zet PORTA als uitvoer
+	adcInit();					// Initialiseer ADC
+	lcd_init();					// Initialiseer LCD
 
 	while (1)
 	{
-		PORTA = ADCH;
+		PORTA = ADCH;               // Lees ADC-waarde en stuur deze naar PORTA
+		char temp[10];              // Maak een tekenreeks-array om de temperatuurwaarde op te slaan
 		
-		char temp[10];
-		sprintf("%d    ", ADCH);	//Give temp the value of ADCH in string form
-		lcd_set_cursor(0);				//Reset cursor
-		lcd_display_text(temp);			//Display temp on lcd
+		sprintf(temp, "%d    ", ADCH); // Converteer ADC-waarde naar een tekenreeks en sla deze op in 'temp'
+		// De extra spaties worden toegevoegd om eventuele overgebleven karakters van eerdere metingen te wissen
 		
-		wait(100);
+		lcd_set_cursor(0);				// Reset LCD-cursorpositie
+		lcd_display_text(temp);			// Toon temperatuur op LCD
+		wait(100);		                // Wacht 100 milliseconden voordat de volgende meting wordt uitgevoerd
 	}
 }
-
