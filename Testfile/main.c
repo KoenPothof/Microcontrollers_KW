@@ -10,6 +10,7 @@
 #define SPI_MISO	3						// PB3: spi Pin MISO
 #define SPI_SS		0						// PB0: spi Pin Slave Select
 
+
 // wait(): busy waiting for 'ms' millisecond
 // used library: util/delay.h
 void wait(int ms)
@@ -52,12 +53,14 @@ char spi_writeRead( unsigned char data )
 void spi_slaveSelect(unsigned char chipNumber)
 {
 	PORTB &= ~BIT(chipNumber);
+	
 }
 
 // Deselect device on pinnumer PORTB
 void spi_slaveDeSelect(unsigned char chipNumber)
 {
 	PORTB |= BIT(chipNumber);
+		
 }
 
 void spi_writeWord (unsigned char adress, unsigned char data){
@@ -102,28 +105,20 @@ void writeLedDisplay(int value){
 	
 	// aan de hand van de value worden de cijfers gesplitst in de digits, bij negatieve value worden de cijfers een digit opgeschoven en komt er een min-teken voor
 	if (value < 10 && value >= 0){
-		digit4 = 0x0F; // Anders print hij een punt op de display
-		digit1 = value;
+		digit4 = value;
 		} else if (value >= 10 && value < 100){
-		digit4 = 0x0F;
-		digit2 = value / 10;
-		digit1 = value % 10;
+		digit4 = value / 10;
+		digit3 = value % 10;
 		} else if (value >= 100 && value < 1000){
-		digit4 = 0x0F;
-		digit3 = value / 100;
-		digit2 = (value / 10) % 10;
-		digit1 = value % 10;
+		digit4 = value / 100;
+		digit3 = (value / 10) % 10;
+		digit2 = value % 10;
 		} else if (value >= 1000 && value < 10000){
 		digit4 = value / 1000;
 		digit3 = (value / 100) % 10;
 		digit2 = (value / 10) % 10;
 		digit1 = value % 10;
-		} else if (value >= 10000){
-		digit4 = 9;
-		digit3 = 9;
-		digit2 = 9;
-		digit1 = 9;
-		} else if (value < 0 && value > -10){
+		}  else if (value < 0 && value > -10){
 		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
 		value = (value * -1);
 		digit3 = value;
@@ -138,12 +133,7 @@ void writeLedDisplay(int value){
 		digit3 = value / 100;
 		digit2 = (value / 10) % 10;
 		digit1 = value % 10;
-		} else if (value <= -1000){
-		value = (value * -1);
-		digit3 = 9;
-		digit2 = 9;
-		digit1 = 9;
-		}
+	}
 	
 	// check of de digits zijn veranderd en print ze dan
 	if (digit1 != -1){
@@ -171,15 +161,15 @@ void writeLedDisplay(int value){
 		spi_writeWord(4, digit4);
 		_delay_ms(10);
 		} else {
-		spi_writeWord(4, digit4);
+		spi_writeWord(4, 0x0F);
 		_delay_ms(10);
 	}
 }
 
 void timerStart(){
 	TCCR1B |= ((1 << CS10 ) | (1 << CS11 )); // maak timer Fcpu/64
-	double seconden = 9995;
-	
+	double seconden = 1000;
+
 	for (;;) {
 		// Wacht tot de timer op 1 seconden zit, dan true
 		if (TCNT1 >= 62496) {
@@ -197,8 +187,8 @@ int main()
 	DDRB=0x01;					  	// Set PB0 pin as output for display select
 	spi_masterInit();              	// Initialize spi module
 	displayDriverInit();            // Initialize display chip
-	timerStart(); //start het tellen
 	
+	writeLedDisplay(5633);
 	return (1);
 }
 
