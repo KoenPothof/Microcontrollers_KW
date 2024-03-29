@@ -10,6 +10,10 @@
 #define SPI_MISO	3						// PB3: spi Pin MISO
 #define SPI_SS		0						// PB0: spi Pin Slave Select
 
+#define PASS_THRESHOLD 20
+
+#define TRIGGER_PIN 1     // The GPIO pin connected to the trigger pin of the ultrasonic sensor
+#define ECHO_PIN 0        // The GPIO pin connected to the echo pin of the ultrasonic sensor
 
 double seconden = 0;
 
@@ -167,29 +171,71 @@ void writeLedDisplay(int value){
 	}
 }
 
-void timerStart(){
-	PORTC = 0x01;
-	TCCR1B |= ((1 << CS10 ) | (1 << CS11 )); // maak timer Fcpu/64
+void initUltrasonic() {
+	DDRD |= (1 << TRIGGER_PIN); // Set trigger pin as output
+	DDRD &= ~(1 << ECHO_PIN);   // Set echo pin as input
+}
 
-	for (;;) {
-		// Wacht tot de timer op 1 seconden zit, dan true
-		if (TCNT1 >= 62496) {
-			TCNT1 = 0; // Reset timer
-			seconden+=0.5;
-			writeLedDisplay(seconden);
-		}
-		if(PINC == 1){
-			seconden = 0;
-		}
+void triggerPulse() {
+	PORTD |= (1 << TRIGGER_PIN); // Set trigger pin high
+	_delay_us(10);               // Wait for 10 microseconds
+	PORTD &= ~(1 << TRIGGER_PIN);// Set trigger pin low
+}
+
+uint16_t measureDistance() {
+	uint16_t pulse_width = 0;
+	uint32_t timeout = 10000; // Set a timeout value (adjust as needed)
+
+	// Wait for echo pin to go high
+	while (!(PIND & (1 << ECHO_PIN)) && timeout > 0) {
+		timeout--;
+		_delay_us(1);
 	}
+
+	// Measure pulse width
+	while ((PIND & (1 << ECHO_PIN)) && timeout > 0) {
+		pulse_width++;
+		_delay_us(1);
+	}
+
+	return pulse_width; // Return the pulse width
+}
+
+
+void timerStart(){
+	 PORTC = 0x01;
+	 DDRE = 0x0F;
+
+	 TCCR1B |= ((1 << CS10 ) | (1 << CS11 )); // Set timer Fcpu/64
+
+	 for (;;) {
+		 if (TCNT1 >= 62496) {
+			 TCNT1 = 0; // Reset timer
+			 //seconden += 0.5; // You should initialize 'seconden' somewhere
+			 //writeLedDisplay(seconden);
+		 }
+
+		 triggerPulse(); // Send trigger pulse
+
+		 uint16_t pulse_width = measureDistance(); // Measure echo pulse width
+
+		 uint16_t distance = pulse_width/58; // Convert pulse width to distance in cm
+
+		 if (distance < 10) { // Threshold distance
+			 PORTE = 0b00000000; // Turn off LEDs
+			 //seconden = 0; // Reset the counter
+			 } else {
+			 PORTE = 0b11111111; // Turn on LEDs
+		 }
+	 }
 }
 
 int main()
 {
 	// inilialize
-	DDRB=0x01;					  	// Set PB0 pin as output for display select
 	spi_masterInit();              	// Initialize spi module
 	displayDriverInit();            // Initialize display chip
+	initUltrasonic();
 	timerStart();
 		
 	
