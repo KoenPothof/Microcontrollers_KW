@@ -10,6 +10,8 @@
 #define SPI_MISO	3						// PB3: spi Pin MISO
 #define SPI_SS		0						// PB0: spi Pin Slave Select
 
+#define LED_PIN     PA0
+
 // wait(): busy waiting for 'ms' millisecond
 // used library: util/delay.h
 void wait(int ms)
@@ -89,6 +91,16 @@ void displayOn()
 void displayOff()
 {
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
+}
+
+// LED aan
+void ledOn(){
+	PORTA |= (1 << LED_PIN); // zet de LED aan
+}
+
+// LED uit
+void ledOff(){
+	PORTA &= ~(1 << LED_PIN); // zet de LED uit
 }
 
 void writeLedDisplay(int value){
@@ -193,11 +205,14 @@ void timerStart(){
 int main()
 {
 	// inilialize
+	DDRA |= (1 << LED_PIN);
 	
 	DDRB=0x01;					  	// Set PB0 pin as output for display select
 	spi_masterInit();              	// Initialize spi module
 	displayDriverInit();            // Initialize display chip
-	timerStart(); //start het tellen
+	
+	//timerStart(); //start het tellen
+	
 	
 	return (1);
 }
