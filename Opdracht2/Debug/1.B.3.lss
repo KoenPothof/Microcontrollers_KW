@@ -21,9 +21,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
   8 .debug_frame  00000024  00000000  00000000  00001338  2**2
                   CONTENTS, READONLY, DEBUGGING
+<<<<<<< HEAD
   9 .debug_str    000003bd  00000000  00000000  0000135c  2**0
                   CONTENTS, READONLY, DEBUGGING
  10 .debug_ranges 00000010  00000000  00000000  00001719  2**0
+=======
+  9 .debug_str    000003c7  00000000  00000000  0000135c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_ranges 00000010  00000000  00000000  00001723  2**0
+>>>>>>> eindopdrachten_interrupts
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -119,6 +125,7 @@ Disassembly of section .text:
 
 int main(void)
 {
+<<<<<<< HEAD
 	DDRD = 0xFF; // Stel alle pinnen van Port D in als uitgangen
   9e:	8f ef       	ldi	r24, 0xFF	; 255
   a0:	81 bb       	out	0x11, r24	; 17
@@ -139,6 +146,27 @@ int main(void)
 		}
 		else{
 			PORTD = 0b00000000; // Zet alle pinnen van Port D laag
+=======
+	DDRD = 0xFF;
+  9e:	8f ef       	ldi	r24, 0xFF	; 255
+  a0:	81 bb       	out	0x11, r24	; 17
+	PORTC = 0x01;
+  a2:	81 e0       	ldi	r24, 0x01	; 1
+  a4:	85 bb       	out	0x15, r24	; 21
+    
+    while (1) 
+    {
+		if(PINC == 1){
+  a6:	83 b3       	in	r24, 0x13	; 19
+  a8:	81 30       	cpi	r24, 0x01	; 1
+  aa:	19 f4       	brne	.+6      	; 0xb2 <main+0x14>
+			PORTD = 0b10000000;
+  ac:	80 e8       	ldi	r24, 0x80	; 128
+  ae:	82 bb       	out	0x12, r24	; 18
+  b0:	fa cf       	rjmp	.-12     	; 0xa6 <main+0x8>
+		}else{
+			PORTD = 0b00000000;
+>>>>>>> eindopdrachten_interrupts
   b2:	12 ba       	out	0x12, r1	; 18
   b4:	f8 cf       	rjmp	.-16     	; 0xa6 <main+0x8>
 
