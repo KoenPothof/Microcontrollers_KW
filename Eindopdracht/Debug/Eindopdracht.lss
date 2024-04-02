@@ -13,21 +13,21 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000768  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000000a8  00000000  00000000  000007a4  2**0
+  5 .debug_aranges 000000a0  00000000  00000000  000007a4  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000fa4  00000000  00000000  0000084c  2**0
+  6 .debug_info   00000f76  00000000  00000000  00000844  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 00000959  00000000  00000000  000017f0  2**0
+  7 .debug_abbrev 0000093d  00000000  00000000  000017ba  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000006ca  00000000  00000000  00002149  2**0
+  8 .debug_line   000006a0  00000000  00000000  000020f7  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  0000015c  00000000  00000000  00002814  2**2
+  9 .debug_frame  0000014c  00000000  00000000  00002798  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000559  00000000  00000000  00002970  2**0
+ 10 .debug_str    0000054b  00000000  00000000  000028e4  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    0000087c  00000000  00000000  00002ec9  2**0
+ 11 .debug_loc    0000085e  00000000  00000000  00002e2f  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000098  00000000  00000000  00003745  2**0
+ 12 .debug_ranges 00000090  00000000  00000000  0000368d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -132,9 +132,9 @@ Disassembly of section .text:
   ac:	a9 cf       	rjmp	.-174    	; 0x0 <__vectors>
 
 000000ae <spi_masterInit>:
+	spi_writeWord(0x0C, 0x01); // Afsluiten -> 1 = normaal
 }
 
-// Set display off ('shut down')
 void displayOff()
 {
 	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
@@ -225,45 +225,45 @@ void writeLedDisplay(int value){
  138:	cf 93       	push	r28
  13a:	df 93       	push	r29
  13c:	9c 01       	movw	r18, r24
+	int digit1 = -1;
+	int digit2 = -1;
 	int digit3 = -1;
 	char digit4 = -1;
 	
-	
-	// aan de hand van de value worden de cijfers gesplitst in de digits, bij negatieve value worden de cijfers een digit opgeschoven en komt er een min-teken voor
 	if (value < 10 && value >= 0){
  13e:	8a 30       	cpi	r24, 0x0A	; 10
  140:	91 05       	cpc	r25, r1
  142:	40 f4       	brcc	.+16     	; 0x154 <writeLedDisplay+0x22>
 		digit4 = value;
  144:	f8 2e       	mov	r15, r24
+}
+
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
 	int digit2 = -1;
 	int digit3 = -1;
  146:	cf ef       	ldi	r28, 0xFF	; 255
  148:	df ef       	ldi	r29, 0xFF	; 255
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
+}
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
 	int digit2 = -1;
  14a:	0f ef       	ldi	r16, 0xFF	; 255
  14c:	1f ef       	ldi	r17, 0xFF	; 255
+{
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
  14e:	6f ef       	ldi	r22, 0xFF	; 255
  150:	7f ef       	ldi	r23, 0xFF	; 255
  152:	9b c0       	rjmp	.+310    	; 0x28a <writeLedDisplay+0x158>
+	int digit3 = -1;
+	char digit4 = -1;
 	
-	
-	// aan de hand van de value worden de cijfers gesplitst in de digits, bij negatieve value worden de cijfers een digit opgeschoven en komt er een min-teken voor
 	if (value < 10 && value >= 0){
 		digit4 = value;
 		} else if (value >= 10 && value < 100){
@@ -280,19 +280,19 @@ void writeLedDisplay(int value){
 		digit3 = value % 10;
  166:	c8 2f       	mov	r28, r24
  168:	d9 2f       	mov	r29, r25
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
+}
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
 	int digit2 = -1;
  16a:	0f ef       	ldi	r16, 0xFF	; 255
  16c:	1f ef       	ldi	r17, 0xFF	; 255
+{
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
  16e:	6f ef       	ldi	r22, 0xFF	; 255
  170:	7f ef       	ldi	r23, 0xFF	; 255
@@ -330,11 +330,11 @@ void writeLedDisplay(int value){
 		digit2 = value % 10;
  1a0:	03 2f       	mov	r16, r19
  1a2:	12 2f       	mov	r17, r18
+{
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
  1a4:	6f ef       	ldi	r22, 0xFF	; 255
  1a6:	7f ef       	ldi	r23, 0xFF	; 255
@@ -387,7 +387,7 @@ void writeLedDisplay(int value){
  1ee:	09 96       	adiw	r24, 0x09	; 9
  1f0:	09 97       	sbiw	r24, 0x09	; 9
  1f2:	68 f4       	brcc	.+26     	; 0x20e <writeLedDisplay+0xdc>
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
  1f4:	cc 27       	eor	r28, r28
  1f6:	dd 27       	eor	r29, r29
@@ -398,31 +398,31 @@ void writeLedDisplay(int value){
 		digit2 = (value / 10) % 10;
 		digit1 = value % 10;
 		}  else if (value < 0 && value > -10){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
  1fc:	0f 2e       	mov	r0, r31
  1fe:	ff e0       	ldi	r31, 0x0F	; 15
  200:	ff 2e       	mov	r15, r31
  202:	f0 2d       	mov	r31, r0
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
+}
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
 	int digit2 = -1;
  204:	0f ef       	ldi	r16, 0xFF	; 255
  206:	1f ef       	ldi	r17, 0xFF	; 255
+{
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
  208:	6f ef       	ldi	r22, 0xFF	; 255
  20a:	7f ef       	ldi	r23, 0xFF	; 255
  20c:	3e c0       	rjmp	.+124    	; 0x28a <writeLedDisplay+0x158>
 		digit1 = value % 10;
 		}  else if (value < 0 && value > -10){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
 		digit3 = value;
 		} else if (value <= -10 && value > -100){
@@ -431,7 +431,7 @@ void writeLedDisplay(int value){
  212:	9f 4f       	sbci	r25, 0xFF	; 255
  214:	8a 35       	cpi	r24, 0x5A	; 90
  216:	91 05       	cpc	r25, r1
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
  218:	80 f4       	brcc	.+32     	; 0x23a <writeLedDisplay+0x108>
  21a:	88 27       	eor	r24, r24
@@ -446,26 +446,26 @@ void writeLedDisplay(int value){
  228:	eb 01       	movw	r28, r22
  22a:	8c 01       	movw	r16, r24
 		}  else if (value < 0 && value > -10){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
 		digit3 = value;
 		} else if (value <= -10 && value > -100){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
  22c:	0f 2e       	mov	r0, r31
  22e:	ff e0       	ldi	r31, 0x0F	; 15
  230:	ff 2e       	mov	r15, r31
  232:	f0 2d       	mov	r31, r0
+{
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
  234:	6f ef       	ldi	r22, 0xFF	; 255
  236:	7f ef       	ldi	r23, 0xFF	; 255
  238:	28 c0       	rjmp	.+80     	; 0x28a <writeLedDisplay+0x158>
 		} else if (value <= -10 && value > -100){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
 		digit3 = value / 10;
 		digit2 = value % 10;
@@ -475,7 +475,7 @@ void writeLedDisplay(int value){
  23e:	9c 4f       	sbci	r25, 0xFC	; 252
  240:	84 38       	cpi	r24, 0x84	; 132
  242:	93 40       	sbci	r25, 0x03	; 3
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
  244:	d0 f4       	brcc	.+52     	; 0x27a <writeLedDisplay+0x148>
  246:	31 95       	neg	r19
@@ -502,53 +502,53 @@ void writeLedDisplay(int value){
 		digit1 = value % 10;
  26c:	63 2f       	mov	r22, r19
  26e:	72 2f       	mov	r23, r18
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
 		value = (value * -1);
 		digit3 = value / 10;
 		digit2 = value % 10;
 		} else if (value <= -100 && value > -1000){
-		digit4 = 0x0F; // hier moet eigenlijk een - teken staan
+		digit4 = 0x0F; // Hier moet eigenlijk een - teken staan
  270:	0f 2e       	mov	r0, r31
  272:	ff e0       	ldi	r31, 0x0F	; 15
  274:	ff 2e       	mov	r15, r31
  276:	f0 2d       	mov	r31, r0
  278:	08 c0       	rjmp	.+16     	; 0x28a <writeLedDisplay+0x158>
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
+
+void writeLedDisplay(int value){
 	int digit1 = -1;
 	int digit2 = -1;
 	int digit3 = -1;
 	char digit4 = -1;
  27a:	ff 24       	eor	r15, r15
+}
+
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
 	int digit2 = -1;
 	int digit3 = -1;
  27c:	fa 94       	dec	r15
  27e:	cf ef       	ldi	r28, 0xFF	; 255
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
+}
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
 	int digit2 = -1;
  280:	df ef       	ldi	r29, 0xFF	; 255
  282:	0f ef       	ldi	r16, 0xFF	; 255
+{
+	spi_writeWord(0x0C, 0x00); // Afsluiten -> 1 = normaal
 }
 
 void writeLedDisplay(int value){
-	
-	// alle digits op -1 zodat je straks kan kijken of deze veranderd worden
 	int digit1 = -1;
  284:	1f ef       	ldi	r17, 0xFF	; 255
  286:	6f ef       	ldi	r22, 0xFF	; 255
+		digit3 = value / 100;
 		digit2 = (value / 10) % 10;
 		digit1 = value % 10;
 	}
 	
-	// check of de digits zijn veranderd en print ze dan
 	if (digit1 != -1){
  288:	7f ef       	ldi	r23, 0xFF	; 255
  28a:	6f 3f       	cpi	r22, 0xFF	; 255
@@ -672,11 +672,11 @@ void writeLedDisplay(int value){
 00000330 <initUltrasonic>:
 
 void initUltrasonic() {
-	DDRD |= (1 << TRIGGER_PIN); // Set trigger pin as output
+	DDRD |= (1 << TRIGGER_PIN); // Zet trigger-pin als output
  330:	81 b3       	in	r24, 0x11	; 17
  332:	82 60       	ori	r24, 0x02	; 2
  334:	81 bb       	out	0x11, r24	; 17
-	DDRD &= ~(1 << ECHO_PIN);   // Set echo pin as input
+	DDRD &= ~(1 << ECHO_PIN);   // Zet echo-pin als input
  336:	81 b3       	in	r24, 0x11	; 17
  338:	8e 7f       	andi	r24, 0xFE	; 254
  33a:	81 bb       	out	0x11, r24	; 17
@@ -686,7 +686,7 @@ void initUltrasonic() {
 }
 
 void triggerPulse() {
-	PORTD |= (1 << TRIGGER_PIN); // Set trigger pin high
+	PORTD |= (1 << TRIGGER_PIN); // Zet trigger-pin hoog
  33e:	82 b3       	in	r24, 0x12	; 18
  340:	82 60       	ori	r24, 0x02	; 2
  342:	82 bb       	out	0x12, r24	; 18
@@ -700,8 +700,8 @@ void triggerPulse() {
  346:	8a 95       	dec	r24
  348:	f1 f7       	brne	.-4      	; 0x346 <triggerPulse+0x8>
  34a:	00 c0       	rjmp	.+0      	; 0x34c <triggerPulse+0xe>
-	_delay_us(10);               // Wait for 10 microseconds
-	PORTD &= ~(1 << TRIGGER_PIN);// Set trigger pin low
+	_delay_us(10);               // Wacht 10 microseconden
+	PORTD &= ~(1 << TRIGGER_PIN);// Zet trigger-pin laag
  34c:	82 b3       	in	r24, 0x12	; 18
  34e:	8d 7f       	andi	r24, 0xFD	; 253
  350:	82 bb       	out	0x12, r24	; 18
@@ -712,13 +712,13 @@ void triggerPulse() {
 
 uint16_t measureDistance() {
 	uint16_t pulse_width = 0;
-	uint32_t timeout = 10000; // Set a timeout value (adjust as needed)
+	uint32_t timeout = 10000; // Zet een time-out waarde (aanpassen indien nodig)
  354:	40 e1       	ldi	r20, 0x10	; 16
  356:	57 e2       	ldi	r21, 0x27	; 39
  358:	60 e0       	ldi	r22, 0x00	; 0
  35a:	70 e0       	ldi	r23, 0x00	; 0
 
-	// Wait for echo pin to go high
+	// Wacht tot echo-pin hoog wordt
 	while (!(PIND & (1 << ECHO_PIN)) && timeout > 0) {
  35c:	08 c0       	rjmp	.+16     	; 0x36e <measureDistance+0x1a>
 		timeout--;
@@ -732,9 +732,9 @@ uint16_t measureDistance() {
  36c:	00 00       	nop
 uint16_t measureDistance() {
 	uint16_t pulse_width = 0;
-	uint32_t timeout = 10000; // Set a timeout value (adjust as needed)
+	uint32_t timeout = 10000; // Zet een time-out waarde (aanpassen indien nodig)
 
-	// Wait for echo pin to go high
+	// Wacht tot echo-pin hoog wordt
 	while (!(PIND & (1 << ECHO_PIN)) && timeout > 0) {
  36e:	80 99       	sbic	0x10, 0	; 16
  370:	0e c0       	rjmp	.+28     	; 0x38e <measureDistance+0x3a>
@@ -749,7 +749,7 @@ uint16_t measureDistance() {
 		_delay_us(2);
 	}
 
-	// Measure pulse width
+	// Meet pulsbreedte
 	while ((PIND & (1 << ECHO_PIN)) && timeout > 0) {
 		pulse_width++;
  382:	01 96       	adiw	r24, 0x01	; 1
@@ -764,7 +764,7 @@ uint16_t measureDistance() {
 		_delay_us(2);
 	}
 
-	// Measure pulse width
+	// Meet pulsbreedte
 	while ((PIND & (1 << ECHO_PIN)) && timeout > 0) {
  392:	80 9b       	sbis	0x10, 0	; 16
  394:	05 c0       	rjmp	.+10     	; 0x3a0 <measureDistance+0x4c>
@@ -777,15 +777,14 @@ uint16_t measureDistance() {
 		_delay_us(2);
 	}
 
-	return pulse_width; // Return the pulse width
+	return pulse_width; // Geef de pulsbreedte terug
 }
  3a0:	08 95       	ret
 
 000003a2 <ledOn>:
 
-// LED aan
 void ledOn(){
-	PORTA |= (1 << LED_PIN); // zet de LED aan
+	PORTA |= (1 << LED_PIN); // Zet de LED aan
  3a2:	8b b3       	in	r24, 0x1b	; 27
  3a4:	81 60       	ori	r24, 0x01	; 1
  3a6:	8b bb       	out	0x1b, r24	; 27
@@ -794,9 +793,8 @@ void ledOn(){
 000003aa <ledOff>:
 }
 
-// LED uit
 void ledOff(){
-	PORTA &= ~(1 << LED_PIN); // zet de LED uit
+	PORTA &= ~(1 << LED_PIN); // Zet de LED uit
  3aa:	8b b3       	in	r24, 0x1b	; 27
  3ac:	8e 7f       	andi	r24, 0xFE	; 254
  3ae:	8b bb       	out	0x1b, r24	; 27
@@ -806,29 +804,29 @@ void ledOff(){
 }
 
 void timerStart(){
-	 PORTC = 0x01;
+	PORTC = 0x01;
  3b2:	81 e0       	ldi	r24, 0x01	; 1
  3b4:	85 bb       	out	0x15, r24	; 21
-	 DDRE = 0x0F;
+	DDRE = 0x0F;
  3b6:	8f e0       	ldi	r24, 0x0F	; 15
  3b8:	82 b9       	out	0x02, r24	; 2
 
-	 TCCR1B |= ((1 << CS10 ) | (1 << CS11 )); // Set timer Fcpu/64
+	TCCR1B |= ((1 << CS10 ) | (1 << CS11 )); // Zet timer op Fcpu/64
  3ba:	8e b5       	in	r24, 0x2e	; 46
  3bc:	83 60       	ori	r24, 0x03	; 3
  3be:	8e bd       	out	0x2e, r24	; 46
 
-	 for (;;) {
-		 if (TCNT1 >= 62496) {
+	for (;;) {
+		if (TCNT1 >= 62496) {
  3c0:	8c b5       	in	r24, 0x2c	; 44
  3c2:	9d b5       	in	r25, 0x2d	; 45
  3c4:	80 32       	cpi	r24, 0x20	; 32
  3c6:	94 4f       	sbci	r25, 0xF4	; 244
  3c8:	d0 f0       	brcs	.+52     	; 0x3fe <timerStart+0x4c>
-			 TCNT1 = 0; // Reset timer
+			TCNT1 = 0; // Reset timer
  3ca:	1d bc       	out	0x2d, r1	; 45
  3cc:	1c bc       	out	0x2c, r1	; 44
-			 seconden += 0.5; // You should initialize 'seconden' somewhere
+			seconden += 0.5; // Initialiseer 'seconden' ergens
  3ce:	20 e0       	ldi	r18, 0x00	; 0
  3d0:	30 e0       	ldi	r19, 0x00	; 0
  3d2:	40 e0       	ldi	r20, 0x00	; 0
@@ -842,21 +840,21 @@ void timerStart(){
  3ec:	70 93 01 01 	sts	0x0101, r23	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
  3f0:	80 93 02 01 	sts	0x0102, r24	; 0x800102 <__DATA_REGION_ORIGIN__+0x2>
  3f4:	90 93 03 01 	sts	0x0103, r25	; 0x800103 <__DATA_REGION_ORIGIN__+0x3>
-			 writeLedDisplay(seconden);
+			writeLedDisplay(seconden);
  3f8:	96 d0       	rcall	.+300    	; 0x526 <__fixsfsi>
  3fa:	cb 01       	movw	r24, r22
  3fc:	9a de       	rcall	.-716    	; 0x132 <writeLedDisplay>
-		 }
+		}
 
-		 triggerPulse(); // Send trigger pulse
+		triggerPulse(); // Stuur trigger-puls
  3fe:	9f df       	rcall	.-194    	; 0x33e <triggerPulse>
  400:	a9 df       	rcall	.-174    	; 0x354 <measureDistance>
 
-		 uint16_t pulse_width = measureDistance(); // Measure echo pulse width
+		uint16_t pulse_width = measureDistance(); // Meet echo-pulsbreedte
  402:	ec 01       	movw	r28, r24
  404:	60 91 00 01 	lds	r22, 0x0100	; 0x800100 <__DATA_REGION_ORIGIN__>
 
-		 uint16_t distance = pulse_width/58; // Convert pulse width to distance in cm
+		uint16_t distance = pulse_width/58; // Converteer pulsbreedte naar afstand in cm
 
 		if (seconden==2){
  408:	70 91 01 01 	lds	r23, 0x0101	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
@@ -874,39 +872,39 @@ void timerStart(){
  424:	c4 34       	cpi	r28, 0x44	; 68
  426:	d2 40       	sbci	r29, 0x02	; 2
 		}
-		 if (distance < 10) { // Threshold distance
+		if (distance < 10) { // Drempelafstand
  428:	58 f4       	brcc	.+22     	; 0x440 <__LOCK_REGION_LENGTH__+0x40>
  42a:	13 b8       	out	0x03, r1	; 3
  42c:	10 92 00 01 	sts	0x0100, r1	; 0x800100 <__DATA_REGION_ORIGIN__>
-			 PORTE = 0b00000000; // Turn off LEDs
-			 seconden = 0; // Reset the counter
+			PORTE = 0b00000000; // Zet LEDs uit
+			seconden = 0; // Reset de teller
  430:	10 92 01 01 	sts	0x0101, r1	; 0x800101 <__DATA_REGION_ORIGIN__+0x1>
  434:	10 92 02 01 	sts	0x0102, r1	; 0x800102 <__DATA_REGION_ORIGIN__+0x2>
  438:	10 92 03 01 	sts	0x0103, r1	; 0x800103 <__DATA_REGION_ORIGIN__+0x3>
  43c:	b2 df       	rcall	.-156    	; 0x3a2 <ledOn>
-			 ledOn();
+			ledOn();
  43e:	c0 cf       	rjmp	.-128    	; 0x3c0 <timerStart+0xe>
  440:	8f ef       	ldi	r24, 0xFF	; 255
  442:	83 b9       	out	0x03, r24	; 3
-			 
-			 } else {
-			 PORTE = 0b11111111; // Turn on LEDs
+			
+			} else {
+			PORTE = 0b11111111; // Zet LEDs aan
  444:	bd cf       	rjmp	.-134    	; 0x3c0 <timerStart+0xe>
 
 00000446 <main>:
  446:	8a b3       	in	r24, 0x1a	; 26
  448:	81 60       	ori	r24, 0x01	; 1
-	 }
+	}
 }
 
 int main()
 {
 	DDRA |= (1 << LED_PIN);
  44a:	8a bb       	out	0x1a, r24	; 26
-	// inilialize
-	spi_masterInit();              	// Initialize spi module
+	// Initialiseer
+	spi_masterInit();              	// Initialiseer spi-module
  44c:	30 de       	rcall	.-928    	; 0xae <spi_masterInit>
-	displayDriverInit();            // Initialize display chip
+	displayDriverInit();            // Initialiseer display-chip
  44e:	64 de       	rcall	.-824    	; 0x118 <displayDriverInit>
 	initUltrasonic();
  450:	6f df       	rcall	.-290    	; 0x330 <initUltrasonic>
