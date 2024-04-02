@@ -14,6 +14,7 @@
 
 #define TRIGGER_PIN 1     // The GPIO pin connected to the trigger pin of the ultrasonic sensor
 #define ECHO_PIN 0        // The GPIO pin connected to the echo pin of the ultrasonic sensor
+#define LED_PIN PA0
 
 double seconden = 0;
 
@@ -189,18 +190,27 @@ uint16_t measureDistance() {
 	// Wait for echo pin to go high
 	while (!(PIND & (1 << ECHO_PIN)) && timeout > 0) {
 		timeout--;
-		_delay_us(1);
+		_delay_us(2);
 	}
 
 	// Measure pulse width
 	while ((PIND & (1 << ECHO_PIN)) && timeout > 0) {
 		pulse_width++;
-		_delay_us(1);
+		_delay_us(2);
 	}
 
 	return pulse_width; // Return the pulse width
 }
 
+// LED aan
+void ledOn(){
+	PORTA |= (1 << LED_PIN); // zet de LED aan
+}
+
+// LED uit
+void ledOff(){
+	PORTA &= ~(1 << LED_PIN); // zet de LED uit
+}
 
 void timerStart(){
 	 PORTC = 0x01;
@@ -211,8 +221,8 @@ void timerStart(){
 	 for (;;) {
 		 if (TCNT1 >= 62496) {
 			 TCNT1 = 0; // Reset timer
-			 //seconden += 0.5; // You should initialize 'seconden' somewhere
-			 //writeLedDisplay(seconden);
+			 seconden += 0.5; // You should initialize 'seconden' somewhere
+			 writeLedDisplay(seconden);
 		 }
 
 		 triggerPulse(); // Send trigger pulse
@@ -221,9 +231,14 @@ void timerStart(){
 
 		 uint16_t distance = pulse_width/58; // Convert pulse width to distance in cm
 
+		if (seconden==2){
+			ledOff();
+		}
 		 if (distance < 10) { // Threshold distance
 			 PORTE = 0b00000000; // Turn off LEDs
-			 //seconden = 0; // Reset the counter
+			 seconden = 0; // Reset the counter
+			 ledOn();
+			 
 			 } else {
 			 PORTE = 0b11111111; // Turn on LEDs
 		 }
@@ -232,13 +247,12 @@ void timerStart(){
 
 int main()
 {
+	DDRA |= (1 << LED_PIN);
 	// inilialize
 	spi_masterInit();              	// Initialize spi module
 	displayDriverInit();            // Initialize display chip
 	initUltrasonic();
 	timerStart();
-		
-	
 		
 	
 	return (1);
